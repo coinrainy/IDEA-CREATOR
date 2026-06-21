@@ -19,6 +19,42 @@ For copied Codex installs, use:
 Last reviewed: 2026-06-21.
 
 Latest task sync:
+- 2026-06-21: Implemented the post-review SRLP-Aux revision and ran the 5-run
+  Go/Kill gate. SRLP-Aux uses a single-head mixed target
+  `normalize(z_hat + lambda_t * w * r_hat)` with `lambda_max=0.1`, `tau=0.15`,
+  and 10% warmup. Smoke passed. Gate results passed: SRLP-Aux improved over
+  old SRLP hard on Chameleon/Texas/Wisconsin/Actor/CiteSeer (5/5), reached or
+  matched the strongest target-family result on Chameleon and Texas (2/4
+  heterophily gate), and had no NaN/collapse. Current canonical proposal is
+  `refine-logs/FINAL_PROPOSAL.md` for SRLP-Aux. Next step: limited 10-split
+  target-family internal ablation; keep external strong-baseline paper table
+  paused.
+- 2026-06-21: Completed a method-only strict review of SRLP after the M2
+  pilot results. Verdict: DOWNGRADE. Hard isolation does reduce leakage, but
+  the residual-only target is internally misaligned with the reachable online
+  signal and loses task-relevant latent information. Recommended revision is to
+  demote SRLP from a standalone objective to an energy-gated residual auxiliary
+  on top of a FullLatent primary objective, with a 3-5 run Go/Kill gate before
+  abandoning the standalone SRLP claim.
+- 2026-06-21: Continued the SRLP experiment bridge through M2. Cora/CiteSeer
+  200-epoch pilots completed, Chameleon was extended to 1000 epochs, and
+  Cornell/Texas/Wisconsin/Actor split-0 1000-epoch target-family ablations
+  completed sequentially on the 4060. Engineering and leakage checks pass, but
+  the method-effect criterion does not: SRLP has 0/5 clear wins over the
+  strongest target-family ablation across Cornell/Texas/Wisconsin/Actor/
+  Chameleon split 0, with Cornell only tied. Pause 10 split and external
+  strong-baseline expansion until the residual target design is revised.
+- 2026-06-21: User preference update: experiment progress and results should
+  be reported in Chinese by default, with numeric metrics shown in tables when
+  possible and a clear pass/fail/next-step interpretation after each batch.
+- 2026-06-21: Implemented the SRLP 4060 small-graph experiment bridge inside
+  the nested `baselines/BGRL` checkout. Added SRLP utilities, training runner,
+  sequential reproducer, leakage probe, Cora/CiteSeer fixed split files, and
+  JSON/CSV output protocol. Codex subagent review verdict was PASS_WITH_FIXES;
+  fixes applied include strict hard-isolation self-loop control, expanded CSV
+  traceability fields, CiteSeer split pre-generation, and dataset path casing.
+  M0 Cora/Chameleon smoke passed; Chameleon 200-epoch target-family pilot is
+  positive for SRLP against FullLatent/ZPZ/NoIso but still below BGRL.
 - 2026-06-21: Organized the SRLP idea-discovery and refinement artifacts for
   Git tracking and pushed them to `origin/master`. Commit scope includes the
   latest SRLP idea report, reviewer/refinement logs, formula-tightened final
@@ -50,6 +86,11 @@ Communication preference:
 - For literature search and novelty checks, prioritize recent papers from the
   last two years and always check the most recent 6 months. Only use older
   papers when they are foundational or uniquely representative.
+- For experiment reporting, describe each run batch in Chinese. Prefer compact
+  tables for metrics such as validation accuracy, test accuracy, prediction
+  cosine, residual norm, skipped ratio, effective rank, probe cosine, and MSE;
+  after the table, add a short interpretation: passed / failed / inconclusive
+  and the recommended next action.
 
 This workspace is a research project for graph contrastive learning node
 classification. The previous selected research direction was NFR-GCL

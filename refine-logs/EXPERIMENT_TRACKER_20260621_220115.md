@@ -14,11 +14,8 @@
 | R010 | M2 | 小异配图扩展 | 4 target-family variants | Actor split 0, 1000 epochs | valid/test + diagnostics | MUST | DONE | 最强消融 FullLatent-Iso `0.27237`，SRLP hard `0.26776`。 |
 | R011 | M5 | 泄漏探针 | SRLP hard | Chameleon split 0 checkpoint | probe cosine/MSE | MUST | DONE | probe cosine `0.27185`, MSE `0.00362`。 |
 | R012 | M5 | 泄漏探针 | SRLP-NoIso | Chameleon split 0 checkpoint | probe cosine/MSE | MUST | DONE | probe cosine `0.63130`, MSE `0.00236`。 |
-| R013 | M3 | 10 split 内部消融 | SRLP-Aux vs target-family variants | Chameleon/Texas/Wisconsin/Actor, optional Cornell | mean/std | MUST | READY_NEXT | Residual-only M2 未通过，但 SRLP-Aux 小 gate 已通过；只做内部 target-family 扩展。 |
+| R013 | M3 | 10 split 内部消融 | 4 target-family variants | Cornell/Texas/Wisconsin/Chameleon, optional Actor | mean/std | MUST | PAUSED | M2 未通过：SRLP 没有在 3/5 小异配图上优于最强消融。 |
 | R014 | 外部主表 | 强基线对比 | 外部 baselines | 小图 / 中小异配图 | paper table | NICE | PAUSED | 当前 SRLP 机制证据不足，暂不进入主表扩展。 |
-| R015 | 修订实现 | 方法降级修订 | SRLP-Aux | Code + smoke | py_compile + 5 epoch smoke | MUST | DONE | 新增 `target_mode=srlp_aux`，单头混合 target；Cora/Chameleon 5 epoch smoke 通过。 |
-| R016 | 修订 gate | 小 gate | SRLP-Aux | Chameleon/Texas/Wisconsin/Actor split 0, 1000 epochs | valid/test + diagnostics | MUST | DONE | 4/4 相对旧 SRLP hard 提升；Chameleon/Texas 达到或超过最强 target-family。 |
-| R017 | 修订 gate | 同配 sanity | SRLP-Aux | CiteSeer fixed split seed 0, 200 epochs | valid/test + diagnostics | MUST | DONE | `test@best=0.67656`，高于旧 SRLP hard `0.67280`，无 NaN/collapse。 |
 
 ## 输出位置
 
@@ -27,14 +24,11 @@
 - M1 Chameleon 200：`baselines/BGRL/runs/srlp_m1_chameleon200_fixed_selfloops/results.csv`
 - M2 Chameleon 1000：`baselines/BGRL/runs/srlp_m2_chameleon1000/results.csv`
 - M2 小异配图 split 0：`baselines/BGRL/runs/srlp_m2_hetero_split0/results.csv`
-- SRLP-Aux smoke：`baselines/BGRL/runs/srlp_aux_smoke/results.csv`
-- SRLP-Aux heterophily gate：`baselines/BGRL/runs/srlp_aux_gate_hetero1000/results.csv`
-- SRLP-Aux CiteSeer gate：`baselines/BGRL/runs/srlp_aux_gate_citeseer200/results.csv`
 - 泄漏探针：`baselines/BGRL/runs/srlp_m1_chameleon200_fixed_selfloops/chameleon/*/probe_*.json`
 - SRLP 实现文件：`baselines/BGRL/bgrl/srlp_utils.py`, `baselines/BGRL/train_srlp_transductive.py`, `baselines/BGRL/reproduce_srlp.py`, `baselines/BGRL/probe_srlp_leakage.py`
 
 ## 当前决策
 
-Residual-only SRLP 已降级，不再作为主方法。SRLP-Aux 小 gate 通过，可以进入有限 10 split 内部消融；外部强基线主表继续暂停，直到 SRLP-Aux 的 10 split mean/std 稳定优于 target-family 消融。
+暂停 10 split 和外部强基线扩展。下一步应先回到方法缺陷分析：当前 hard isolation 能降低泄漏，但 residual target 的下游分类收益不稳定，尤其在 Wisconsin、Texas、Chameleon 1000 上低于更简单的 FullLatent/ZPZ target。
 
 备注：`baselines/BGRL/` 是外层项目忽略的 nested repository，实验实现代码目前保留在该 nested checkout 中，除非单独在 nested repo 里提交，否则外层 Git 不会跟踪这些脚本。

@@ -61,3 +61,25 @@
 | 2026-06-21 19:34 | /research-refine | refine-logs/FINAL_PROPOSAL_20260621_193459.md | implementation | formula-tightened SRLP final proposal |
 | 2026-06-21 19:34 | /research-refine | refine-logs/FINAL_PROPOSAL.md | implementation | latest copy |
 | 2026-06-21 19:34 | /research-refine | research-wiki/ideas/srlp_gcl.md | implementation | updated SRLP formula guardrails |
+| 2026-06-21 21:19 | /experiment-bridge | refine-logs/EXPERIMENT_PLAN_20260621_211928.md | implementation | SRLP 4060 small-graph experiment plan |
+| 2026-06-21 21:19 | /experiment-bridge | refine-logs/EXPERIMENT_PLAN.md | implementation | latest SRLP experiment plan |
+| 2026-06-21 21:19 | /experiment-bridge | refine-logs/EXPERIMENT_TRACKER_20260621_211928.md | implementation | SRLP pilot run tracker snapshot |
+| 2026-06-21 21:19 | /experiment-bridge | refine-logs/EXPERIMENT_TRACKER.md | implementation | latest SRLP pilot run tracker |
+| 2026-06-21 21:19 | /experiment-bridge | refine-logs/EXPERIMENT_RESULTS_20260621_211928.md | implementation | SRLP initial pilot results snapshot |
+| 2026-06-21 21:19 | /experiment-bridge | refine-logs/EXPERIMENT_RESULTS.md | implementation | latest SRLP initial pilot results |
+| 2026-06-21 21:19 | /experiment-bridge | refine-logs/EXPERIMENT_CODE_REVIEW_20260621_211928.md | implementation | Codex subagent review and applied fixes |
+| 2026-06-21 21:19 | /experiment-bridge | refine-logs/EXPERIMENT_CODE_REVIEW.md | implementation | latest SRLP experiment code review |
+| 2026-06-21 21:19 | /experiment-bridge | baselines/dataset_splits/homophily/fixed_1_1_8_seed0/cora_split_seed0.npz | implementation | fixed Cora 1:1:8 split seed 0 |
+| 2026-06-21 21:19 | /experiment-bridge | baselines/dataset_splits/homophily/fixed_1_1_8_seed0/citeseer_split_seed0.npz | implementation | fixed CiteSeer 1:1:8 split seed 0 |
+| 2026-06-21 22:01 | /experiment-bridge | refine-logs/EXPERIMENT_RESULTS_20260621_220115.md | implementation | SRLP M1/M2 updated results snapshot with Cora/CiteSeer, Chameleon 1000, and heterophily split-0 expansion |
+| 2026-06-21 22:01 | /experiment-bridge | refine-logs/EXPERIMENT_RESULTS.md | implementation | latest SRLP M1/M2 results |
+| 2026-06-21 22:01 | /experiment-bridge | refine-logs/EXPERIMENT_TRACKER_20260621_220115.md | implementation | SRLP tracker snapshot after pausing 10 split expansion |
+| 2026-06-21 22:01 | /experiment-bridge | refine-logs/EXPERIMENT_TRACKER.md | implementation | latest SRLP tracker |
+| 2026-06-21 22:12 | /research-refine | refine-logs/FINAL_PROPOSAL_20260621_221209.md | implementation | post-experiment revised SRLP-Aux proposal |
+| 2026-06-21 22:12 | /research-refine | refine-logs/FINAL_PROPOSAL.md | implementation | latest SRLP-Aux proposal |
+| 2026-06-21 22:12 | /research-refine | refine-logs/SRLP_POST_EXPERIMENT_REVIEW_20260621_221209.md | implementation | Codex subagent post-experiment method review and SRLP-Aux gate |
+| 2026-06-21 22:12 | /research-refine | refine-logs/SRLP_POST_EXPERIMENT_REVIEW.md | implementation | latest SRLP post-experiment method review |
+| 2026-06-21 22:12 | /experiment-bridge | refine-logs/EXPERIMENT_RESULTS_20260621_221209.md | implementation | SRLP-Aux gate results snapshot |
+| 2026-06-21 22:12 | /experiment-bridge | refine-logs/EXPERIMENT_RESULTS.md | implementation | latest SRLP-Aux gate results |
+| 2026-06-21 22:12 | /experiment-bridge | refine-logs/EXPERIMENT_TRACKER_20260621_221209.md | implementation | tracker snapshot after SRLP-Aux gate |
+| 2026-06-21 22:12 | /experiment-bridge | refine-logs/EXPERIMENT_TRACKER.md | implementation | latest SRLP-Aux tracker |
