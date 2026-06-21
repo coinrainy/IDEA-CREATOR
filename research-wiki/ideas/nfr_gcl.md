@@ -3,8 +3,8 @@ type: idea
 node_id: idea:nfr_gcl
 title: "NFR-GCL: Node-Frequency Routed Graph Contrastive Learning"
 stage: proposed
-status: active
-outcome: pending
+status: abandoned
+outcome: stopped_for_low_novelty
 fair_test_status: not_run
 based_on: ["paper:yang2023_graph_contrastive_learning", "paper:wang2022_augmentationfree_graph_contrastive", "paper:zhu2020_deep_graph_contrastive"]
 target_gaps: ["gap:G1", "gap:G4", "gap:G5"]
@@ -15,7 +15,7 @@ added: 2026-06-21T08:48:28Z
 
 ## Status
 
-ACTIVE / READY_TO_PILOT. Codex reviewer ranked this as the first-choice idea with paper potential 8.0/10.
+ABANDONED / ARCHIVED. After a novelty scan on 2026-06-21, the idea was judged too close to recent node-level adaptive spectral fusion work for graph contrastive learning. The user decided not to continue this direction because its chance of becoming a strong new-paper contribution is low.
 
 ## Hypothesis
 
@@ -31,9 +31,8 @@ Actor, Chameleon, and Squirrel official 10 fixed splits. Must compare against Po
 
 ## Failure Notes
 
-Not failed yet. Stop this route if the learned node router does not beat global/random router ablations or if gains fall below the go/no-go threshold.
+Stopped before implementation. The main reason is novelty risk rather than an experimental failure. The closest-risk area is node-level adaptive low/high spectral fusion for graph contrastive learning; NFR-GCL would need a much sharper delta such as indispensable mid-band routing plus local compatibility-driven routing, but that is no longer the preferred path.
 
 ## Connections
 
 Edges are recorded in `graph/edges.jsonl`.
-
