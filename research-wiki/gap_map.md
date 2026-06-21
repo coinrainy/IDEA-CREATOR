@@ -44,3 +44,11 @@ _Field gaps with stable IDs._
 - **Evidence**: Many cells are already OOM/TODO on a 12GB local GPU; methods requiring new large-scale training or text encoders are not fair first-pass candidates.
 - **Linked papers**: paper:chen2024_leveraging_contrastive_learning
 - **Candidate ideas**: I1, I6, I11, I16
+
+## G6: Positive alignment can be trivialized by message passing
+
+- **Status**: unresolved
+- **Summary**: Recent 2026 work argues that ordinary positive sample maximization in graph contrastive learning may be made too easy by message passing. A new GCL method should avoid targets that are already recoverable by simple neighborhood smoothing.
+- **Evidence**: SPGCL analyzes this issue from the perspective of Dirichlet energy. This motivates predictive targets that remove the low-information smoothed component before contrastive alignment.
+- **Linked papers**: paper:shan2026_revisiting_positive_samples, paper:thakoor2021_largescale_representation_learning
+- **Candidate ideas**: SRLP-GCL

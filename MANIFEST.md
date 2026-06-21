@@ -30,3 +30,34 @@
 | 2026-06-21 08:48 | /idea-discovery | research-wiki/ideas/compatibility_calibrated_edges.md | idea-discovery | killed standalone idea written to research wiki |
 | 2026-06-21 | /idea-discovery | idea-stage/CROSS_DOMAIN_TRANSFER_GCL_20260621.md | idea-discovery | cross-domain method transfer survey for graph contrastive learning |
 | 2026-06-21 | /idea-discovery | idea-stage/CROSS_DOMAIN_TRANSFER_GCL.md | idea-discovery | latest pointer for cross-domain method transfer survey |
+| 2026-06-21 18:53 | /idea-discovery | idea-stage/IDEA_CANDIDATES_20260621_185314.md | idea-discovery | 24 latent-prediction GCL candidate mechanisms |
+| 2026-06-21 18:53 | /idea-discovery | idea-stage/IDEA_CANDIDATES.md | idea-discovery | latest copy |
+| 2026-06-21 18:53 | /idea-discovery | idea-stage/IDEA_REPORT_20260621_185314.md | idea-discovery | SRLP-GCL latent-prediction idea report |
+| 2026-06-21 18:53 | /idea-discovery | idea-stage/IDEA_REPORT.md | idea-discovery | latest copy |
+| 2026-06-21 18:53 | /idea-discovery | research-wiki/ideas/srlp_gcl.md | idea-discovery | active latent-prediction GCL idea written to research wiki |
+| 2026-06-21 18:53 | /idea-discovery | research-wiki/papers/skenderi2023_graph_jepa.md | idea-discovery | Graph-JEPA prior note |
+| 2026-06-21 18:53 | /idea-discovery | research-wiki/papers/hou2023_graphmae2.md | idea-discovery | GraphMAE2 prior note |
+| 2026-06-21 18:53 | /idea-discovery | research-wiki/papers/srinivasan2025_predict_cluster_refine.md | idea-discovery | graph JPEB-GSSL prior note |
+| 2026-06-21 18:53 | /idea-discovery | research-wiki/papers/li2026_aspect.md | idea-discovery | ASPECT prior note |
+| 2026-06-21 18:53 | /idea-discovery | research-wiki/papers/shan2026_revisiting_positive_samples.md | idea-discovery | SPGCL positive-sample prior note |
+| 2026-06-21 18:53 | /idea-discovery | research-wiki/gap_map.md | idea-discovery | added G6 positive-alignment shortcut gap |
+| 2026-06-21 18:54 | /idea-discovery | idea-stage/IDEA_REPORT.html | idea-discovery | rendered HTML view of SRLP-GCL idea report |
+| 2026-06-21 19:03 | /research-refine | refine-logs/round-0-initial-proposal.md | implementation | initial SRLP proposal before reviewer critique |
+| 2026-06-21 19:03 | /research-refine | refine-logs/REFINE_STATE_20260621_190321.json | implementation | SRLP refinement state checkpoint |
+| 2026-06-21 19:08 | /research-refine | refine-logs/round-0-method-review.md | implementation | reviewer round 0 method audit |
+| 2026-06-21 19:08 | /research-refine | refine-logs/round-1-review.md | implementation | raw reviewer round 1 archive |
+| 2026-06-21 19:10 | /research-refine | refine-logs/round-1-refinement.md | implementation | SRLP revised proposal after reviewer critique |
+| 2026-06-21 19:12 | /research-refine | refine-logs/round-1-method-review.md | implementation | reviewer round 1 ready-for-pilot audit |
+| 2026-06-21 19:15 | /research-refine | refine-logs/round-2-review.md | implementation | normalized second reviewer archive |
+| 2026-06-21 19:15 | /research-refine | refine-logs/score-history.md | implementation | SRLP refinement score history |
+| 2026-06-21 19:15 | /research-refine | refine-logs/FINAL_PROPOSAL_20260621_191558.md | implementation | refined SRLP final proposal |
+| 2026-06-21 19:15 | /research-refine | refine-logs/FINAL_PROPOSAL.md | implementation | latest copy |
+| 2026-06-21 19:15 | /research-refine | refine-logs/REVIEW_SUMMARY_20260621_191558.md | implementation | SRLP review summary |
+| 2026-06-21 19:15 | /research-refine | refine-logs/REVIEW_SUMMARY.md | implementation | latest copy |
+| 2026-06-21 19:15 | /research-refine | refine-logs/REFINEMENT_REPORT_20260621_191558.md | implementation | SRLP refinement report |
+| 2026-06-21 19:15 | /research-refine | refine-logs/REFINEMENT_REPORT.md | implementation | latest copy |
+| 2026-06-21 19:15 | /research-refine | refine-logs/REFINE_STATE_20260621_191558.json | implementation | completed SRLP refinement state |
+| 2026-06-21 19:15 | /research-refine | refine-logs/REFINE_STATE.json | implementation | latest copy |
+| 2026-06-21 19:34 | /research-refine | refine-logs/FINAL_PROPOSAL_20260621_193459.md | implementation | formula-tightened SRLP final proposal |
+| 2026-06-21 19:34 | /research-refine | refine-logs/FINAL_PROPOSAL.md | implementation | latest copy |
+| 2026-06-21 19:34 | /research-refine | research-wiki/ideas/srlp_gcl.md | implementation | updated SRLP formula guardrails |

@@ -14,3 +14,5 @@ _Append-only timeline._
 - `2026-06-21T08:52:24Z` idea-discovery wrote 5 reviewed ideas (1 active, 1 backup, 2 deprioritized/auxiliary, 1 killed standalone)
 - `2026-06-21` decision: abandoned NFR-GCL before implementation because novelty risk is high after finding close node-level adaptive spectral fusion prior work; next direction requires a fresh idea or explicit pivot to a backup.
 - `2026-06-21` idea-discovery survey: mapped cross-domain methods transferable to graph contrastive learning; strongest follow-up directions are latent prediction, invariant-environment contrast, and optimal-transport soft alignment.
+- `2026-06-21T18:53:14+08:00` idea-discovery selected SRLP-GCL as the active latent-prediction GCL direction; status is paper-only ACTIVE / ready for pilot, with no GPU result yet.
+- `2026-06-21T19:15:58+08:00` research-refine completed two reviewer rounds for SRLP; final score 7.35/10, verdict READY for pilot, with final proposal saved at `refine-logs/FINAL_PROPOSAL.md`.

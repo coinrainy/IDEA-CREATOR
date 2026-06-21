@@ -18,6 +18,30 @@ For copied Codex installs, use:
 
 Last reviewed: 2026-06-21.
 
+Latest task sync:
+- 2026-06-21: Organized the SRLP idea-discovery and refinement artifacts for
+  Git tracking and pushed them to `origin/master`. Commit scope includes the
+  latest SRLP idea report, reviewer/refinement logs, formula-tightened final
+  proposal, research-wiki notes, manifest entries, and this handoff update.
+- 2026-06-21: Tightened SRLP final formulas in
+  `refine-logs/FINAL_PROPOSAL.md`: added teacher-side stop-gradient, normalized
+  context direction, `epsilon`/`T_valid`/`skipped_ratio`, explicit
+  `A_online` target-incident-edge masking, online context normalization, and
+  made `L_var` a collapse-only fallback rather than part of the main method.
+- 2026-06-21: Completed a first-round senior-reviewer method audit of
+  `refine-logs/round-0-initial-proposal.md` for SRLP-GCL. Verdict: REVISE,
+  weighted score 5.95/10. Main required revisions are to make the residual
+  target explicitly context-unpredictable rather than merely `Z - alpha PZ`,
+  strengthen target leakage control, and demote conditional InfoNCE from the
+  first implementation. Review saved at
+  `refine-logs/round-0-method-review.md`.
+- 2026-06-21: Completed a second-round review of
+  `refine-logs/round-1-refinement.md`. Verdict: READY for pilot, weighted
+  score 7.35/10. The context-projected residual and target-isolated online
+  encoding are sufficient for a small BGRL-based pilot; remaining risk is
+  empirical predictability of the residual after hard isolation. Review saved
+  at `refine-logs/round-1-method-review.md`.
+
 Communication preference:
 - Use Chinese when explaining research ideas, novelty, experiment status, and
   implementation decisions. Avoid unnecessary English terminology; when a
@@ -35,9 +59,12 @@ paper contribution is low after novelty checking.
 
 Key artifacts:
 - `MANIFEST.md` tracks ARIS-generated outputs.
-- `idea-stage/IDEA_REPORT.md` is the historical idea-discovery report; it still
-  says NFR-GCL was active at generation time, but that status is now stale.
-- `refine-logs/FINAL_PROPOSAL.md` contains the refined NFR-GCL method thesis.
+- `idea-stage/IDEA_REPORT.md` now contains the latest latent-prediction idea
+  report for SRLP-GCL. Older timestamped reports still preserve the historical
+  NFR-GCL discovery state.
+- `idea-stage/IDEA_CANDIDATES.md` contains the 2026-06-21 candidate pool for
+  latent-prediction graph contrastive learning.
+- `refine-logs/FINAL_PROPOSAL.md` now contains the refined SRLP proposal.
 - `refine-logs/EXPERIMENT_PLAN.md` is historical. `refine-logs/EXPERIMENT_TRACKER.md`
   marks NFR-GCL runs as cancelled and keeps the I6 backup pending decision.
 - `research-wiki/` stores paper notes, gap map, idea pages, and graph edges.
@@ -51,6 +78,10 @@ Implementation orientation:
   novelty before writing code.
 - If a new method is selected later, prefer a small pilot inside the existing
   `baselines/` harness rather than starting a new large code stack.
+- The currently selected paper-only candidate is SRLP
+  (Shortcut-Resistant Latent Prediction), documented in
+  `research-wiki/ideas/srlp_gcl.md`. It is refined and ready for a small
+  BGRL-based pilot, but has not been implemented or empirically validated yet.
 - Preserve the protocol in `baselines/reproduction_protocol.md`: heterophily
   datasets must use Geom-GCN official fixed splits from
   `baselines/dataset_splits/heterophily/geom-gcn/`, not random splits.
@@ -72,6 +103,14 @@ Novelty status update:
   investigate next are latent-prediction graph contrastive learning,
   invariant-environment graph contrastive learning, and optimal-transport soft
   alignment for edge/semantic compatibility.
+- 2026-06-21 latent-prediction scan selected SRLP as the next active idea. A
+  two-round reviewer refinement changed the target from `Z - alpha PZ` to a
+  context-projected residual: remove only the component of the target teacher
+  latent explained by the visible context subspace, then predict that residual
+  from a target-isolated online graph. Closest risks are Graph-JEPA,
+  GraphMAE2, BGRL, JPEB-GSSL/Predict-Cluster-Refine, ASPECT, and SPGCL. Do not
+  claim generic graph latent prediction is novel; the novelty claim must be
+  target construction for shortcut-resistant node-level graph SSL.
 
 Repository status note:
 - This checkout was initialized locally. The outer repository should track
