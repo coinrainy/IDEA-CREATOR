@@ -1,0 +1,8 @@
+{"from": "idea:nfr_gcl", "to": "gap:G1", "type": "addresses_gap", "evidence": "NFR-GCL targets node-local frequency routing missing in existing GCL.", "added": "2026-06-21T08:52:23Z"}
+{"from": "idea:nfr_gcl", "to": "gap:G4", "type": "addresses_gap", "evidence": "Main evidence opportunity is heterophily, where local baselines show large method spread.", "added": "2026-06-21T08:52:23Z"}
+{"from": "idea:nfr_gcl", "to": "paper:yang2023_graph_contrastive_learning", "type": "inspired_by", "evidence": "Builds on high/low-pass heterophily filtering but moves routing to node level.", "added": "2026-06-21T08:52:23Z"}
+{"from": "idea:nfr_gcl", "to": "paper:wang2022_augmentationfree_graph_contrastive", "type": "inspired_by", "evidence": "Uses AF-GCL frequency-bias diagnosis as motivation.", "added": "2026-06-21T08:52:23Z"}
+{"from": "idea:heterophilous_edge_reconstruction", "to": "gap:G2", "type": "addresses_gap", "evidence": "Targets missing distinction between edge compatibility and edge existence.", "added": "2026-06-21T08:52:23Z"}
+{"from": "idea:heterophily_hard_negative_aux", "to": "gap:G3", "type": "addresses_gap", "evidence": "Targets heterophily-aware hard negative safeguards.", "added": "2026-06-21T08:52:23Z"}
+{"from": "idea:node_local_bgrl", "to": "paper:thakoor2021_largescale_representation_learning", "type": "inspired_by", "evidence": "Uses BGRL bootstrapping as base route.", "added": "2026-06-21T08:52:24Z"}
+{"from": "idea:compatibility_calibrated_edges", "to": "paper:zhu2020_graph_contrastive_learning", "type": "inspired_by", "evidence": "Standalone edge calibration is close to adaptive augmentation and is killed as mainline.", "added": "2026-06-21T08:52:24Z"}

@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NFR-GCL Idea Discovery Report</title>
+
+<meta name="generator" content="ARIS render-html (academic, v1)">
+<meta name="aris:source-path" content="idea-stage/IDEA_REPORT.md">
+<meta name="aris:source-sha256" content="00ae4d1bfcb5121e4cfa15b93480587c01aaf63a1ec965221f49ab6585036361">
+<meta name="aris:generated-at" content="2026-06-21 08:52 UTC">
+
+<!-- MathJax 3 -->
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']], processEscapes: true },
+  options: { skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+
+<!-- highlight.js -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/atom-one-light.min.css">
+<script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded', () => hljs.highlightAll());</script>
+
+
+<style>
+:root {
+  --bg: #fdfcf7;
+  --bg-soft: #f4f1ea;
+  --bg-code: #f8f5ec;
+  --ink: #1a1a1a;
+  --ink-soft: #4a4a4a;
+  --ink-muted: #6b6b6b;
+  --primary: #1a4a8c;
+  --primary-soft: #2d6cb8;
+  --accent: #b8390e;
+  --warn: #b45309;
+  --warn-bg: #fef3c7;
+  --info-bg: #dbeafe;
+  --good-bg: #d1fae5;
+  --good: #065f46;
+  --bad-bg: #fee2e2;
+  --bad: #991b1b;
+  --border: #d6d0c0;
+  --border-soft: #e8e3d5;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: "Source Serif Pro", "Source Serif 4", "Crimson Pro", "Georgia", "Songti SC", "STSong", serif;
+  line-height: 1.65;
+  color: var(--ink);
+  background: var(--bg);
+  margin: 0;
+  padding: 0;
+  font-size: 16px;
+}
+
+.layout {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 48px;
+  padding: 40px 32px;
+}
+
+nav.toc {
+  position: sticky;
+  top: 24px;
+  align-self: start;
+  font-size: 13px;
+  max-height: calc(100vh - 48px);
+  overflow-y: auto;
+  border-right: 1px solid var(--border-soft);
+  padding-right: 16px;
+}
+nav.toc h3 {
+  margin: 0 0 12px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-muted);
+  font-weight: 600;
+}
+nav.toc ol { list-style: none; padding: 0; margin: 0; counter-reset: toc; }
+nav.toc ol li { margin: 5px 0; counter-increment: toc; }
+nav.toc ol li::before { content: counter(toc) ". "; color: var(--ink-muted); margin-right: 4px; }
+nav.toc a {
+  color: var(--ink-soft);
+  text-decoration: none;
+  border-bottom: 1px dotted transparent;
+}
+nav.toc a:hover { color: var(--primary); border-bottom-color: var(--primary); }
+nav.toc ul { list-style: none; padding-left: 14px; margin: 3px 0; font-size: 12px; }
+nav.toc ul li::before { content: "→ "; color: var(--border); }
+
+main { min-width: 0; }
+
+header.hero {
+  border-bottom: 3px double var(--primary);
+  padding-bottom: 24px;
+  margin-bottom: 32px;
+}
+header.hero .eyebrow {
+  color: var(--accent);
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+header.hero h1 {
+  font-size: 32px;
+  line-height: 1.2;
+  margin: 0 0 12px;
+  color: var(--ink);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+header.hero .subtitle {
+  font-size: 16px;
+  color: var(--ink-soft);
+  margin: 0 0 8px;
+  font-style: italic;
+}
+header.hero .byline {
+  font-size: 14px;
+  color: var(--ink-soft);
+  margin: 0 0 20px;
+}
+header.hero .byline strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+header.hero .meta {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  font-size: 12px;
+  color: var(--ink-muted);
+  border-top: 1px solid var(--border-soft);
+  padding-top: 14px;
+}
+header.hero .meta span strong { color: var(--ink-soft); }
+header.hero .meta code {
+  font-family: "JetBrains Mono", "SF Mono", "Menlo", "Consolas", monospace;
+  font-size: 11px;
+  background: var(--bg-soft);
+  padding: 1px 5px;
+  border-radius: 3px;
+  border: 1px solid var(--border-soft);
+}
+
+h2 {
+  font-size: 24px;
+  margin: 44px 0 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+  color: var(--ink);
+  font-weight: 700;
+}
+h2 .num { color: var(--primary); font-weight: 600; margin-right: 8px; }
+h3 { font-size: 19px; margin: 28px 0 10px; color: var(--primary); font-weight: 600; }
+h4 { font-size: 16px; margin: 20px 0 8px; color: var(--ink); font-weight: 600; }
+
+p { margin: 10px 0; }
+ul, ol { padding-left: 22px; margin: 10px 0; }
+ul li, ol li { margin: 4px 0; }
+ul li::marker { color: var(--primary); }
+
+strong { color: var(--accent); font-weight: 600; }
+em { color: var(--ink-soft); }
+
+a { color: var(--primary); }
+a:hover { color: var(--accent); }
+
+code:not(.hljs) {
+  font-family: "JetBrains Mono", "SF Mono", "Menlo", "Consolas", monospace;
+  font-size: 0.86em;
+  background: var(--bg-code);
+  padding: 1px 5px;
+  border-radius: 3px;
+  border: 1px solid var(--border-soft);
+  color: var(--accent);
+}
+
+pre {
+  background: #fafaf6;
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--primary);
+  padding: 0;
+  overflow-x: auto;
+  border-radius: 4px;
+  margin: 14px 0;
+}
+pre code, pre code.hljs {
+  background: transparent !important;
+  display: block;
+  padding: 14px 18px !important;
+  font-size: 13px;
+  line-height: 1.55;
+  font-family: "JetBrains Mono", "SF Mono", "Menlo", monospace;
+  color: var(--ink);
+}
+pre.diagram {
+  background: #f9f6ed;
+  border-left: 4px solid var(--accent);
+  font-size: 12.5px;
+  line-height: 1.4;
+}
+
+.callout {
+  margin: 16px 0;
+  padding: 12px 16px;
+  border-radius: 4px;
+  border-left: 4px solid;
+  font-size: 15px;
+}
+.callout-title {
+  font-weight: 600;
+  margin-bottom: 6px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.callout-info { background: var(--info-bg); border-left-color: var(--primary); }
+.callout-info .callout-title { color: var(--primary); }
+.callout-warn { background: var(--warn-bg); border-left-color: var(--warn); }
+.callout-warn .callout-title { color: var(--warn); }
+.callout-good { background: var(--good-bg); border-left-color: var(--good); }
+.callout-good .callout-title { color: var(--good); }
+.callout-bad { background: var(--bad-bg); border-left-color: var(--bad); }
+.callout-bad .callout-title { color: var(--bad); }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+  font-size: 14px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+thead { background: var(--primary); color: white; }
+th, td {
+  text-align: left;
+  padding: 9px 12px;
+  border-bottom: 1px solid var(--border-soft);
+  vertical-align: top;
+}
+th { font-weight: 600; font-size: 13px; letter-spacing: 0.02em; }
+tr:last-child td { border-bottom: none; }
+tbody tr:nth-child(even) { background: var(--bg-soft); }
+
+details.qa, details {
+  background: white;
+  border: 1px solid var(--border-soft);
+  border-radius: 6px;
+  margin: 10px 0;
+  padding: 0;
+}
+details summary {
+  cursor: pointer;
+  padding: 10px 14px;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--primary);
+  list-style: none;
+  user-select: none;
+}
+details summary::-webkit-details-marker { display: none; }
+details summary::before {
+  content: "▸ ";
+  margin-right: 4px;
+  display: inline-block;
+  transition: transform 0.15s;
+}
+details[open] summary::before { transform: rotate(90deg); }
+details[open] summary { border-bottom: 1px solid var(--border-soft); }
+details > :not(summary) { padding: 10px 14px; }
+details p:first-of-type { margin-top: 8px; }
+
+mjx-container[display="true"] { margin: 12px 0 !important; }
+
+footer.aris-footer {
+  margin-top: 60px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+  font-size: 12px;
+  color: var(--ink-muted);
+}
+footer.aris-footer a { color: var(--ink-muted); border-bottom: 1px dotted var(--border); }
+
+@media (max-width: 900px) {
+  .layout { grid-template-columns: 1fr; gap: 20px; padding: 20px 16px; }
+  nav.toc {
+    position: static;
+    max-height: none;
+    border-right: none;
+    border-bottom: 1px solid var(--border-soft);
+    padding-right: 0;
+    padding-bottom: 14px;
+  }
+  header.hero h1 { font-size: 24px; }
+  h2 { font-size: 20px; }
+}
+@media print {
+  nav.toc { display: none; }
+  .layout { grid-template-columns: 1fr; padding: 0; }
+  body { background: white; }
+  header.hero { border-bottom-color: var(--ink); }
+}
+</style>
+</head>
+<body>
+<div class="layout">
+
+<nav class="toc">
+  <h3>Contents</h3>
+  <ol>
+<li><a href="#executive-summary">Executive Summary</a>
+</li>
+<li><a href="#literature-landscape">Literature Landscape</a>
+</li>
+<li><a href="#ranked-ideas">Ranked Ideas</a>
+<ul>
+<li><a href="#idea-1-nfr-gcl-node-frequency-routed-graph-contrastive-learning--active--readytopilot">Idea 1: NFR-GCL: Node-Frequency Routed Graph Contrastive Learning — ACTIVE / READY_TO_PILOT</a></li>
+<li><a href="#idea-2-masked-heterophilous-edge-reconstruction--backup--active">Idea 2: Masked Heterophilous Edge Reconstruction — BACKUP / ACTIVE</a></li>
+<li><a href="#idea-3-heterophily-aware-hard-negative-mining--deprioritized--auxiliary">Idea 3: Heterophily-Aware Hard Negative Mining — DEPRIORITIZED / AUXILIARY</a></li>
+<li><a href="#idea-4-augmentation-free-node-local-bgrl--deprioritized">Idea 4: Augmentation-Free Node-Local BGRL — DEPRIORITIZED</a></li>
+<li><a href="#idea-5-compatibility-calibrated-contrastive-edges--killed-as-standalone">Idea 5: Compatibility-Calibrated Contrastive Edges — KILLED as standalone</a></li>
+</ul>
+</li>
+<li><a href="#incubation-portfolio">Incubation Portfolio</a>
+</li>
+<li><a href="#eliminated-ideas">Eliminated Ideas</a>
+</li>
+<li><a href="#refined-proposal">Refined Proposal</a>
+</li>
+<li><a href="#next-steps">Next Steps</a>
+</li>
+</ol>
+</nav>
+
+<main>
+<header class="hero">
+  
+  <h1>NFR-GCL Idea Discovery Report</h1>
+  
+  
+  <div class="meta">
+    <span><strong>Source:</strong> <code>idea-stage/IDEA_REPORT.md</code></span>
+    <span><strong>SHA256:</strong> <code>00ae4d1bfcb5</code></span>
+    <span><strong>Rendered:</strong> 2026-06-21 08:52 UTC</span>
+    
+  </div>
+</header>
+
+<h1 id="idea-discovery-report">Idea Discovery Report</h1>
+<p><strong>Direction</strong>: 图对比学习，节点分类 <strong>Date</strong>: 2026-06-21 <strong>Pipeline</strong>: research-lit → idea-creator → Codex reviewer → research-refine-pipeline lite <strong>Reviewer</strong>: Codex 子智能体 <code>019ee957-c111-7e42-ada2-d9f9f216e59c</code></p>
+<h2 id="executive-summary">Executive Summary</h2>
+<p>推荐主线是 <strong>NFR-GCL: Node-Frequency Routed Graph Contrastive Learning</strong>。它合并候选 I1+I4：在 PolyGCL/HLCL/AF-GCL 的频带洞察基础上，把“应该低通对齐还是高通/混合频率对齐”从全图级决策推进到节点级路由。当前没有 pilot 结果，因此状态是 <strong>ACTIVE / READY_TO_PILOT</strong>，不是已证实方法。</p>
+<p>最强 backup 是 <strong>Masked Heterophilous Edge Reconstruction</strong>，即候选 I6。它贴合 GRASS 在 Cornell/Wisconsin 的本地强结果，但 novelty 更容易被 GRASS/GREET/GraphMAE 类工作压住，所以不作为第一主线。</p>
+<h2 id="literature-landscape">Literature Landscape</h2>
+<p>本地 <code>baselines/reproduction_results.xlsx</code> 已经覆盖 DGI、MVGRL、GRACE、GCA、BGRL、PolyGCL、GRASS、EPAGCL、EDA-GCL 等 GCL 节点分类 baseline。结果显示：同配图上 Cora/CiteSeer/Amazon-Photo 已较饱和，多方法差距接近方差；异配图上差距更大，PolyGCL 和 GRASS 明显强于传统 GRACE/GCA/DGI。</p>
+<p>关键 prior work 包括 GRACE/GCA/BGRL 作为经典 augmentation 或 bootstrap GCL；AF-GCL 指出 graph augmentation 保留低频、扰动中高频，因此会伤害高频偏好的 heterophily 数据；HLCL 通过高/低通图滤波处理 heterophily；PolyGCL 在本地异配图上是最强锚点；2025 contrastive similarity theory 与 Khan-GCL 说明 negative similarity / hard negatives 仍是开放方向。</p>
+<p>结构性缺口是：现有强方法要么使用全图级频带组合，要么使用全局 edge/feature augmentation。真实图内部常混合同配区域、异配区域、噪声边和结构角色节点，因此需要节点级、无标签的局部频带路由。</p>
+<h2 id="ranked-ideas">Ranked Ideas</h2>
+<h3 id="idea-1-nfr-gcl-node-frequency-routed-graph-contrastive-learning--active--readytopilot">Idea 1: NFR-GCL: Node-Frequency Routed Graph Contrastive Learning — ACTIVE / READY_TO_PILOT</h3>
+<ul><li><strong>Status rationale</strong>: Codex reviewer 排名第 1，paper potential 8.0/10；novelty risk 为 MEDIUM，条件是必须证明 node-wise routing 强于 PolyGCL 的全局 high/low 组合。</li><li><strong>Fair-test status</strong>: 尚未公平测试。必须在 official heterophily splits 上直接对比 PolyGCL、GRASS、EDA-GCL、GCA/GRACE。</li><li><strong>Method (what we actually do)</strong>: 复用 PolyGCL 的 ChebNetII high/low-pass encoder，额外构造 mid-band view；为每个节点用无标签局部统计学习 routing weights；同配倾向节点强调 low/mid consistency，异配倾向节点强调 mid/high complementary consistency；edge compatibility 只作为路由输入，不作为独立贡献。</li><li><strong>Hypothesis</strong>: 节点级频带路由能在图内混合同配/异配区域时，比全局 high/low 组合更稳定地保留 task-relevant signal。</li><li><strong>Minimum experiment</strong>: Actor、Chameleon、Squirrel official 10 splits，平均超过当前 best local baseline 至少 +1.5 points，至少 2/3 数据集胜出；Cora/CiteSeer smoke 不下降超过 1 point。</li><li><strong>Novelty</strong>: 7.5/10。Closest: PolyGCL、HLCL、AF-GCL。差异点是 node-wise routing + mixed-frequency consistency，而非全图固定滤波。</li><li><strong>Pilot result</strong>: SKIPPED / not run in this turn.</li><li><strong>Reviewer likely objection</strong>: “这只是 PolyGCL/HLCL 加门控。”</li><li><strong>Pre-defense</strong>: 加 global-router、random-router、feature-only-router、graph-level-router、no-mid-band、no-compatibility ablation，并报告路由与后验 label homophily 的相关性，后者只做分析不参与训练。</li></ul>
+<h3 id="idea-2-masked-heterophilous-edge-reconstruction--backup--active">Idea 2: Masked Heterophilous Edge Reconstruction — BACKUP / ACTIVE</h3>
+<ul><li><strong>Status rationale</strong>: Reviewer 排名第 2，paper potential 7.2/10。本地 GRASS 在 Cornell/Wisconsin 最强，说明 masked-edge route 有信号。</li><li><strong>Fair-test status</strong>: 未公平测试；必须直接打 GRASS 与 PolyGCL，而不是只赢传统 baseline。</li><li><strong>Method</strong>: 把 GRASS 的随机负边重构改成三类无标签 edge compatibility reconstruction：homophilic-compatible edge、heterophilic-compatible edge、noise/non-edge。</li><li><strong>Minimum experiment</strong>: Cornell、Texas、Wisconsin official 10 splits；平均超过 best-of-GRASS/PolyGCL 至少 +2 points 或 2/3 数据集 split-wise 清楚胜出。</li><li><strong>Novelty</strong>: 6.8/10。Closest: GRASS、GREET、GraphMAE/MaskGAE。</li><li><strong>Pilot result</strong>: SKIPPED / not run.</li></ul>
+<h3 id="idea-3-heterophily-aware-hard-negative-mining--deprioritized--auxiliary">Idea 3: Heterophily-Aware Hard Negative Mining — DEPRIORITIZED / AUXILIARY</h3>
+<ul><li><strong>Status rationale</strong>: Reviewer 认为 standalone 不够，适合作为 NFR-GCL 后续辅助 loss 或 ablation。</li><li><strong>Fair-test status</strong>: 仅在主方法 pilot 过线后考虑。</li><li><strong>Method</strong>: 用 compatibility guard 降低 false-negative 风险，只对结构相近但兼容性冲突的节点施加强 hard-negative pressure。</li><li><strong>Novelty</strong>: 6.4/10。Closest: ProGCL、AUGCL、Khan-GCL、2025 similarity theory。</li></ul>
+<h3 id="idea-4-augmentation-free-node-local-bgrl--deprioritized">Idea 4: Augmentation-Free Node-Local BGRL — DEPRIORITIZED</h3>
+<ul><li><strong>Status rationale</strong>: BGRL 同配强异配弱，但 reviewer 认为 novelty 偏弱，且需要先补齐 BGRL 在 Squirrel/WebKB 的本地 baseline。</li><li><strong>Next condition</strong>: 只有当它能打过 PolyGCL/GRASS，而不只是修复 BGRL 自己的弱点，才值得恢复。</li></ul>
+<h3 id="idea-5-compatibility-calibrated-contrastive-edges--killed-as-standalone">Idea 5: Compatibility-Calibrated Contrastive Edges — KILLED as standalone</h3>
+<ul><li><strong>Status rationale</strong>: Reviewer 认为 standalone 很容易被认为是复杂版 GCA/EDA-GCL。保留为 NFR-GCL 的 routing signal。</li><li><strong>Kill condition</strong>: 除非它独立打过 GCA 和 EDA-GCL on Chameleon/Squirrel/Texas，否则不作为独立论文主线。</li></ul>
+<h2 id="incubation-portfolio">Incubation Portfolio</h2>
+<table><thead><tr><th>Idea</th><th>Status</th><th>Missing condition or next decisive test</th></tr></thead><tbody><tr><td>NFR-GCL</td><td>ACTIVE / READY_TO_PILOT</td><td>Actor/Chameleon/Squirrel official 10-split pilot</td></tr><tr><td>Masked Heterophilous Edge Reconstruction</td><td>BACKUP</td><td>WebKB + Chameleon/Squirrel pilot against GRASS/PolyGCL</td></tr><tr><td>Heterophily-aware hard negatives</td><td>AUXILIARY</td><td>Only after NFR-GCL main signal is positive</td></tr><tr><td>Node-local BGRL</td><td>DEPRIORITIZED</td><td>Complete BGRL heterophily baseline first</td></tr></tbody></table>
+<h2 id="eliminated-ideas">Eliminated Ideas</h2>
+<table><thead><tr><th>Idea</th><th>Fair reason</th></tr></thead><tbody><tr><td>I2 standalone</td><td>Too close to GCA/EDA-GCL unless it independently beats them.</td></tr><tr><td>I11 standalone</td><td>Hard-negative GCL is crowded; keep as ablation.</td></tr><tr><td>I16 mainline</td><td>BGRL+filter framing likely too incremental.</td></tr><tr><td>Graph transformer/tokenized variants</td><td>Need a new code stack; not first pilot under current baselines.</td></tr><tr><td>Benchmark/diagnostic-only routes</td><td>User direction favors positive method paper, not diagnostic report.</td></tr></tbody></table>
+<h2 id="refined-proposal">Refined Proposal</h2>
+<ul><li>Proposal: <code>refine-logs/FINAL_PROPOSAL.md</code></li><li>Experiment plan: <code>refine-logs/EXPERIMENT_PLAN.md</code></li><li>Tracker: <code>refine-logs/EXPERIMENT_TRACKER.md</code></li><li>Pipeline summary: <code>refine-logs/PIPELINE_SUMMARY.md</code></li></ul>
+<h2 id="next-steps">Next Steps</h2>
+<ul><li>[ ] Implement NFR-GCL as a PolyGCL-based minimal patch.</li><li>[ ] Run Actor/Chameleon/Squirrel official 10-split pilot.</li><li>[ ] If pilot passes go/no-go, add ablations and homophily no-regression checks.</li><li>[ ] If pilot fails, switch to I6 backup rather than stacking more modules onto NFR-GCL.</li></ul>
+
+<footer class="aris-footer">
+  Generated by <a href="https://github.com/wanshuiyin/Auto-claude-code-research-in-sleep/blob/main/skills/render-html/SKILL.md">ARIS <code>/render-html</code></a> ·
+  source path <code>idea-stage/IDEA_REPORT.md</code> ·
+  SHA256 <code>00ae4d1bfcb5</code> ·
+  generated at 2026-06-21 08:52 UTC.
+  This is a generated view — edit the source Markdown, then re-render.
+</footer>
+</main>
+
+</div>
+</body>
+</html>
