@@ -55,4 +55,6 @@ Repository status note:
   research documents, protocol files, fixed split masks, and result summaries.
 - Baseline method directories under `baselines/` are nested Git repositories
   and are ignored by the outer repository to avoid accidental gitlink commits.
-- GitHub/PR status still requires a configured `origin` remote.
+- GitHub remote is configured as
+  `origin=https://github.com/coinrainy/IDEA-CREATOR.git`; `master` tracks
+  `origin/master`.
