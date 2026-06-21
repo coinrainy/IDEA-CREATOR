@@ -64,6 +64,11 @@ Novelty status update:
   method. Add ASPECT as required closest prior work/baseline for any paper plan.
 - User decision on 2026-06-21: abandon NFR-GCL rather than spend experiment time
   on a low-novelty direction.
+- 2026-06-21 cross-domain transfer survey saved at
+  `idea-stage/CROSS_DOMAIN_TRANSFER_GCL_20260621.md`. Strongest directions to
+  investigate next are latent-prediction graph contrastive learning,
+  invariant-environment graph contrastive learning, and optimal-transport soft
+  alignment for edge/semantic compatibility.
 
 Repository status note:
 - This checkout was initialized locally. The outer repository should track

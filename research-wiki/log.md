@@ -13,3 +13,4 @@ _Append-only timeline._
 - `2026-06-21T08:42:11Z` idea-discovery updated gap_map for GCL node-classification idea search
 - `2026-06-21T08:52:24Z` idea-discovery wrote 5 reviewed ideas (1 active, 1 backup, 2 deprioritized/auxiliary, 1 killed standalone)
 - `2026-06-21` decision: abandoned NFR-GCL before implementation because novelty risk is high after finding close node-level adaptive spectral fusion prior work; next direction requires a fresh idea or explicit pivot to a backup.
+- `2026-06-21` idea-discovery survey: mapped cross-domain methods transferable to graph contrastive learning; strongest follow-up directions are latent prediction, invariant-environment contrast, and optimal-transport soft alignment.

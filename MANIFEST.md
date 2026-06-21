@@ -28,3 +28,5 @@
 | 2026-06-21 08:48 | /idea-discovery | research-wiki/ideas/heterophily_hard_negative_aux.md | idea-discovery | auxiliary idea written to research wiki |
 | 2026-06-21 08:48 | /idea-discovery | research-wiki/ideas/node_local_bgrl.md | idea-discovery | deprioritized idea written to research wiki |
 | 2026-06-21 08:48 | /idea-discovery | research-wiki/ideas/compatibility_calibrated_edges.md | idea-discovery | killed standalone idea written to research wiki |
+| 2026-06-21 | /idea-discovery | idea-stage/CROSS_DOMAIN_TRANSFER_GCL_20260621.md | idea-discovery | cross-domain method transfer survey for graph contrastive learning |
+| 2026-06-21 | /idea-discovery | idea-stage/CROSS_DOMAIN_TRANSFER_GCL.md | idea-discovery | latest pointer for cross-domain method transfer survey |
