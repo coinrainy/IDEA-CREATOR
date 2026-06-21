@@ -23,6 +23,9 @@ Communication preference:
   implementation decisions. Avoid unnecessary English terminology; when a
   technical term, paper title, file name, or command must stay in English,
   explain it in Chinese immediately.
+- For literature search and novelty checks, prioritize recent papers from the
+  last two years and always check the most recent 6 months. Only use older
+  papers when they are foundational or uniquely representative.
 
 This workspace is a research project for graph contrastive learning node
 classification. The previous selected research direction was NFR-GCL
