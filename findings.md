@@ -1,5 +1,303 @@
 # Research Findings
 
+## 2026-06-22: Pair-level positive abstention also fails the BGRL gate
+
+**Verdict**: `FAILED_SPLIT0_GATE`.
+
+Worker B tested PUAB-GCL (`puab_soft`, `puab_hard`) in an isolated fork. The
+idea calibrated or abstained positive pairs using label-free pair utility
+signals, but kept final evaluation on canonical CPU sklearn.
+
+| Dataset | BGRL control | `puab_soft` | `puab_hard` |
+|---|---:|---:|---:|
+| Cora | 0.833410 | 0.832026 | 0.829257 |
+| CiteSeer | 0.692712 | 0.691585 | 0.688580 |
+| Chameleon | 0.438596 | 0.414474 | 0.418860 |
+
+Conclusion: pair-level abstention does not rescue BGRL; it slightly hurts
+Cora/CiteSeer and clearly hurts Chameleon. Do not merge the worker code or run
+10-split.
+
+## 2026-06-22: Direct no-self BGRL does not recover Positive-Path LIFT
+
+**Verdict**: `FAILED_SPLIT0_GATE`.
+
+Ego-NoSelf BGRL disables automatic self-loops in every GCNConv layer. This
+tested whether the strong fixed Positive-Path / no-self LIFT signal can become
+a trained encoder objective.
+
+| Dataset | BGRL control | Ego-NoSelf | Required reference |
+|---|---:|---:|---:|
+| Cora | 0.832949 | 0.815874 | LIFT 0.842640 |
+| CiteSeer | 0.693088 | 0.663411 | LIFT 0.725770 |
+| Chameleon | 0.438596 | 0.287281 | Positive-Path 0.725877 |
+
+Conclusion: no-self propagation is useful as a fixed feature/channel under
+LIFT gating, but direct no-self message passing destroys too much identity
+signal during BGRL training. Future ego-shortcut methods need a protected
+raw/identity branch.
+
+## 2026-06-22: Missing-feature stress is not enough for a main GCL method
+
+**Verdict**: `FAILED_SPLIT0_GATE`.
+
+MFS-GCL tested node-wise independent feature-entry dropout in the online view,
+aligned to a clean teacher target. Training and representation extraction ran
+on CUDA; the final linear probe stayed on the canonical CPU sklearn protocol.
+
+| Dataset | BGRL control | Best MFS | Required reference |
+|---|---:|---:|---:|
+| Cora | 0.832949 | 0.840794 | LIFT 0.842640 |
+| CiteSeer | 0.693088 | 0.693839 | LIFT 0.725770 |
+| Chameleon | 0.438596 | 0.449561 | Positive-Path 0.725877 |
+
+Conclusion: node-wise missing-feature stress gives only BGRL-internal gains
+and does not challenge the current required controls. The novelty lane is also
+crowded by random feature masking, FDAGCL, and masked/adversarial feature GCL.
+Do not expand this route to 10-split or external baselines.
+
+## 2026-06-22: CCR-GCL shows learned residual complementarity is a safety problem
+
+**Verdict**: `FAILED_CERTIFICATION_GATE`.
+
+CCR-GCL trained a residual GNN branch orthogonal to a fixed LIFT-Portfolio
+teacher. This produced the strongest learned-residual local signal so far on
+Cora, but failed cross-dataset safety.
+
+| Dataset | Portfolio | Certified residual concat | Delta |
+|---|---:|---:|---:|
+| Cora | 0.842640 | 0.855099 | +0.012460 |
+| CiteSeer | 0.725770 | 0.714125 | -0.011645 |
+| Chameleon | 0.699561 | 0.629386 | -0.070175 |
+| Texas | 0.810811 | 0.783784 | -0.027027 |
+| Wisconsin | 0.823529 | 0.803922 | -0.019608 |
+
+Conclusion: learned residual branches can contain useful information, but
+current label-free certification is too weak. Residual edge-lift and
+orthogonality to a teacher anchor did not prevent harmful residuals from being
+added. Do not continue learned-residual expansion without a better residual
+safety criterion.
+
+## 2026-06-22: PAB-BGRL has BGRL-internal signal but is not a main method
+
+**Verdict**: `BGRL_INTERNAL_SIGNAL_NOT_MAIN_METHOD`.
+
+PAB-BGRL directly tests prealignment abstention: nodes whose positive
+alignment is likely already trivialized by message passing receive lower BGRL
+loss weight. This produced small improvements over BGRL on several split-0
+datasets, but not enough to challenge LIFT-Portfolio.
+
+| Dataset | BGRL control | PAB soft | LIFT-Portfolio split-0 |
+|---|---:|---:|---:|
+| Cora | 0.832949 | 0.832949 | 0.842640 |
+| CiteSeer | 0.693464 | 0.695342 | 0.725770 |
+| Chameleon | 0.438596 | 0.449561 | 0.699561 |
+| Texas | 0.621622 | 0.648649 | 0.810811 |
+| Wisconsin | 0.549020 | 0.549020 | 0.823529 |
+
+Conclusion: PAB can be kept as a diagnostic for BGRL positive trivialization,
+but it is not worth 10-split expansion. It also has high novelty risk near the
+2026 SPGCL pre-alignment/message-passing analysis.
+
+## 2026-06-22: EPI-BGRL failed the split-0 main-method gate
+
+**Verdict**: `FAILED_MIXED_SPLIT0_GATE`.
+
+EPI-BGRL tested a GPU-trained route outside the fixed LIFT family. It partitions
+nodes into label-free environments using degree and raw-feature neighborhood
+drift, then balances BGRL node losses across environments with a REx-style
+penalty.
+
+M0 smoke and M1 split-0 all ran with `device=cuda`; final linear probes kept
+the canonical CPU sklearn protocol. The result is not strong enough:
+
+| Dataset | BGRL control | EPI-BGRL | LIFT-Portfolio split-0 |
+|---|---:|---:|---:|
+| Cora | 0.833872 | 0.840794 | 0.842640 |
+| CiteSeer | 0.693839 | 0.690834 | 0.725770 |
+| Chameleon | 0.438596 | 0.425439 | 0.699561 |
+| Texas | 0.621622 | 0.621622 | 0.810811 |
+| Wisconsin | 0.549020 | 0.549020 | 0.823529 |
+
+Conclusion: environment balancing produces a Cora-only local gain but fails the
+decisive CiteSeer/Chameleon/WebKB settings and remains far below
+LIFT-Portfolio. Do not expand EPI to 10-split or external baselines.
+
+## 2026-06-22: LIFT-Portfolio is the strongest current fixed-propagation control
+
+**Verdict**: `STRONG_BASELINE_LOW_NOVELTY`.
+
+R088 audited a fast/full C-grid discrepancy. Chameleon full-grid 10-split
+prefers single P2/global LIFT (`0.685746`) over `LIFT-Stack 0123` (`0.671053`),
+even though fast-grid made stack look competitive. Cora/CiteSeer keep the stack
+gains (`0.848869` / `0.726972`), Squirrel fast-grid keeps the stack gain
+(`0.543708`), and Texas/Wisconsin/Cornell/Actor remain raw-protected.
+
+Conclusion: the required baseline is now LIFT-Portfolio: raw for K0 graphs, P2
+for low-raw-lift K2 graphs, and stack otherwise. This is not the final method
+because it remains a fixed-propagation selector with high novelty risk.
+
+## 2026-06-22: LIFT interaction features failed the Chameleon gate
+
+**Verdict**: `FAILED_SPLIT0_GATE`.
+
+R087 appended fixed nonlinear raw-propagation blocks to LIFT-Stack. Cora and
+CiteSeer show tiny local gains (`0.845408` vs `0.842640`; `0.729527` vs
+`0.725770`), but the useful variant differs by dataset and Chameleon fails
+(`0.666667` best vs `0.668860`, with several variants much worse).
+
+Conclusion: plain fixed-feature micro-tuning is not a paper-level route. Stop
+adding deterministic product/difference/delta blocks on top of LIFT-Stack.
+
+## 2026-06-22: LIFT Channel Gate has only a local Chameleon signal
+
+**Verdict**: `FAILED_ROBUSTNESS_GATE`.
+
+R086 weighted LIFT-Stack feature channels by a label-free channel edge-lift
+score. It found a real Chameleon split-0 positive (`softplus 0.688596` vs
+LIFT-Stack `0.668860`), but this did not generalize: Chameleon fast 10-split
+is effectively neutral (`0.663377` best vs `0.662500`), and Squirrel ReLU
+gating regresses (`0.525360` vs `0.543708`). Cora and CiteSeer also regress in
+the split-0 gate.
+
+Conclusion: simple channel pruning/weighting over fixed propagation stacks is
+not robust enough. Keep channel edge-lift as a diagnostic for noisy Chameleon
+channels, not as a main GCL method.
+
+## 2026-06-22: LIFT-Stack checkpoint residuals failed the complementarity gate
+
+**Verdict**: `FAILED_COMPLEMENTARITY_GATE`.
+
+R085 tested whether existing trained BGRL/GDC/TD encoder checkpoints could be
+used as a residual branch on top of LIFT-Stack. The answer is no for the
+current method search. Cora improves (`0.852792` vs LIFT-Stack `0.842640`), but
+CiteSeer regresses (`0.713749` vs `0.725770`), Chameleon regresses
+(`0.638158` vs `0.668860`), and raw-protected Texas/Wisconsin are damaged
+(`0.783784` / `0.803922` vs `0.810811` / `0.823529`).
+
+Conclusion: a learned GNN checkpoint branch is not automatically complementary
+to fixed propagation stacks. Future methods need a label-free residual
+isolation or routing rule before adding trained representations to LIFT-Stack.
+
+## 2026-06-22: LIFT-HC-GCL failed the mixed split-0 gate
+
+**Verdict**: `FAILED_MIXED_SPLIT0_GATE`.
+
+LIFT-HC-GCL tested whether adding a genuine contrastive branch to LIFT-Stack
+can produce a paper-level GCL method. It trains an MLP encoder on two
+hop/feature-drop views of `[X,PX,P2X,P3X]` with a SimSiam-style loss, then
+evaluates the SSL embedding alone or concatenated with LIFT-Stack.
+
+The 300-epoch split-0 gate is mixed: Cora improves (`0.850023` vs LIFT-Stack
+`0.842640`) and Wisconsin improves locally (`0.843137` vs `0.823529`), while
+Texas is protected by raw fallback. But CiteSeer regresses (`0.716754` vs
+`0.725770`) and Chameleon regresses (`0.657895` vs `0.668860`). Short 5/20
+epoch probes do not fix Chameleon.
+
+Conclusion: a generic hop-drop contrastive transformation on top of fixed
+multi-hop features is not robust enough. Keep LIFT-Stack as the required
+control and restart with a mechanism that does not rely on unconstrained MLP
+contrastive transformations.
+
+## 2026-06-22: LIFT-Stack is the strongest current control, but novelty is weak
+
+**Verdict**: `STRONG_BASELINE_LOW_NOVELTY`.
+
+LIFT-Stack uses the global LIFT selector and activates a fixed multi-hop stack
+only when propagation is reliable: raw fallback for K0 graphs, otherwise
+`[X, PX, P2X, P3X]`. It improves over global LIFT on Cora, CiteSeer,
+Chameleon, and Squirrel, while protecting Texas/Wisconsin/Cornell/Actor.
+
+Key results:
+
+| Dataset | Protocol | Global LIFT | LIFT-Stack 0123 |
+|---|---|---:|---:|
+| Cora | 10 random splits | 0.832995 | 0.848823 |
+| CiteSeer | 10 random splits | 0.700301 | 0.727310 |
+| Chameleon | 10 official splits, fast grid | 0.655482 | 0.662500 |
+| Squirrel | 10 official splits, fast grid | 0.520365 | 0.543708 |
+| Texas/Wisconsin/Cornell/Actor | 10 official splits, fast grid | raw selected | unchanged |
+
+This is empirically useful, but fixed multi-hop feature stacks overlap with
+SIGN/SGC, the very recent Fixed Aggregation Features paper, and PROPGCL's
+training-free propagation thesis. Treat LIFT-Stack as the strongest baseline
+to beat, not as the final GCL method unless the project pivots to a
+selector-only reliability paper.
+
+## 2026-06-22: LIFT-PROP training extensions failed; keep as selector baseline
+
+**Verdict**: `SELECTOR_BASELINE_NOT_MAIN_METHOD`.
+
+LIFT-PROP remains a strong label-free propagation selector, but two compact
+attempts to promote it into a full GCL method failed.
+
+R077 learned soft propagation coefficients over `[X, PX, P2X, P3X]` using an
+edge-positive/random-negative contrastive loss. It improved Cora locally
+(`0.831103` vs fixed selector `0.825565`) but damaged CiteSeer (`0.684072` vs
+`0.709617`) and Chameleon (`0.622807` vs `0.699561`). Texas/Wisconsin would be
+badly damaged by the learned mix, and the only useful behavior was the global
+LIFT gate falling back to raw.
+
+R078 tested node-wise LIFT routing. It again produced a Cora-only signal
+(`node_soft_k02=0.836641` vs global `0.825565`) but regressed on Chameleon,
+Texas, and Wisconsin. The likely reason is that row-wise propagation-depth
+selection breaks representation-space consistency for a shared linear
+classifier.
+
+Recommended next action: do not continue LIFT-PROP as the main GCL method
+unless the project deliberately pivots to a selector-only paper. Use global
+LIFT-PROP as a required training-free baseline for the next idea-discovery
+restart.
+
+## 2026-06-22: Fixed-sign SC-BGRL failed the fair split-0 gate
+
+**Verdict**: `FAILED_FIXED_SIGN_PILOT`.
+
+SC-BGRL was implemented with fixed same-compatible and different-compatible
+edge views based on raw-feature endpoint cosine. An initial threshold split
+collapsed on Chameleon because many edge similarities were exactly zero; this
+was fixed by rank-based top/bottom splitting before making the final decision.
+
+Fair rank-split result:
+
+| Dataset | Control | SC | Delta |
+|---|---:|---:|---:|
+| Cora | 0.832487 | 0.828334 | -0.004153 |
+| Chameleon | 0.438596 | 0.436404 | -0.002193 |
+| Texas | 0.621622 | 0.621622 | +0.000000 |
+| Wisconsin | 0.549020 | 0.549020 | +0.000000 |
+
+No NaN/collapse occurred, but the method has no positive signal. Stop
+fixed-sign SC-BGRL and move to GDC-GCL+.
+
+## 2026-06-22: NPG-GCL weak signal, move to SC-BGRL
+
+**Verdict**: `WEAK_SIGNAL_DEPRIORITIZED`, not `READY_TO_REFINE`.
+
+NPG-GCL was implemented as a response to SPGCL-style positive-alignment
+trivialization. It weights BGRL node alignment by nontrivial gain over a cheap
+message-passing prealignment baseline. Engineering passed: py_compile, dry-run,
+and Cora/Chameleon 5-epoch smoke all completed with no NaN/collapse.
+
+The 200-epoch split-0 signal is too weak for promotion:
+
+| Dataset | Control | NPG | Delta |
+|---|---:|---:|---:|
+| Cora | 0.830641 | 0.834333 | +0.003692 |
+| CiteSeer | 0.692712 | 0.691210 | -0.001503 |
+| Chameleon | 0.438596 | 0.442982 | +0.004386 |
+| Texas | 0.621622 | 0.621622 | +0.000000 |
+| Wisconsin | 0.549020 | 0.549020 | +0.000000 |
+
+Ablations weaken the claim. Cora random weighting (`0.838948`) beats NPG,
+though Chameleon NPG (`0.442982`) beats uniform (`0.438596`) and random
+(`0.429825`). Conclusion: NPG has a small Chameleon mechanism signal, but it
+is not broad or strong enough for 3-split/refinement under the positive-method
+goal.
+
+Recommended next action: stop NPG as the lead and implement SC-BGRL, the
+signed-compatibility backup route.
+
 ## 2026-06-22: TD-GCL implemented and kept as speculative incubate
 
 **Verdict**: `SPECULATIVE_INCUBATE`, not `READY_TO_REFINE`.
@@ -201,3 +499,287 @@ A counterfactual edge-mask evaluator was added before implementing a full traini
 The Wisconsin signal did not survive the 10-split check. On Wisconsin, the best fixed mask reached `0.823529` and validation-selected masks reached `0.827451`, both below raw `0.839216`. On Texas, the best fixed mask reached `0.794595` and validation-selected masks reached `0.805405`, both below raw `0.829730`.
 
 Recommended next action: do not implement CIG/CLEAR training. Restart wide idea discovery with a different mechanism family.
+
+## 2026-06-22: NPG, fixed-sign SC-BGRL, and GDC-GCL+ failed local promotion gates
+
+**Verdict**: no active route remains from the post-TDGCL candidate batch.
+
+NPG-GCL tested whether positive alignment should be weighted by nontrivial gain
+over message-passing prealignment. It passed smoke and stayed stable, but the
+signal was too weak for promotion: Cora improved only from `0.830641` to
+`0.834333`, Chameleon from `0.438596` to `0.442982`, CiteSeer regressed, and
+Texas/Wisconsin tied. The Cora ablation was decisive because random weighting
+reached `0.838948`, above NPG.
+
+Fixed-sign SC-BGRL then tested same-compatible / different-compatible views
+using rank-based edge splitting. After fixing the Chameleon sign split so it no
+longer degenerated, the fair pilot failed: Cora `0.828334` vs control
+`0.832487`, Chameleon `0.436404` vs `0.438596`, and Texas/Wisconsin tied.
+
+GDC-GCL+ tested gradient-residual dynamics positives to rescue the earlier
+TD-GCL signal with a cleaner novelty claim. It was stable and non-collapsed,
+but split-0 failed: Cora `0.830641` vs BGRL `0.833410`, CiteSeer `0.691210` vs
+`0.693464`, Chameleon only `0.442982` vs `0.438596`, and Texas/Wisconsin tied.
+TD-direction comparison was also too weak under this runner.
+
+Recommended next action: restart wide idea discovery. Avoid treating dynamic
+positives, nontrivial gain weighting, fixed signed views, role/WL positives,
+filter anchors, or raw-retention baselines as main contributions unless a
+fresh mechanism changes the fair-test setting.
+
+## 2026-06-22: LIFT-PROP-GCL emerges as an active propagation-reliability route
+
+**Verdict**: active with novelty risk; direct novelty check required.
+
+The post-GDC restart found that deterministic propagation is a much stronger
+signal than the recent training losses. On Chameleon, `P^2X` with the official
+Geom-GCN splits reaches `0.685746 +/- 0.021187`, far above the old RSP/DCA/FBA
+diagnostics. On Texas/Wisconsin, propagation is harmful and raw features remain
+dominant (`0.829730 +/- 0.051042` and `0.839216 +/- 0.043157`).
+
+The useful idea is not feature-token propagation: it is weaker than `P^2X` on
+Chameleon and weaker than raw on WebKB, and GRAPHITE already covers feature-node
+graph construction. The useful idea is a label-free propagation reliability
+gate:
+
+```text
+if mean_edge_cos(P^2X) - mean_random_pair_cos(P^2X) >= 0.35:
+    use P^2X
+else:
+    use X
+```
+
+This K2 edge-lift gate selects K=2 for Cora/CiteSeer/Chameleon and K=0 for
+Texas/Wisconsin. It matches the oracle K on 4/5 datasets; Cora's oracle is K=3
+(`0.835256`) while the gate selects K=2 (`0.826488`).
+
+Recommended next action: novelty-check the reliability gate against PROPGCL,
+Less is More, ASPECT, GRAPHITE, and graph-adaptive propagation/filtering. If
+the gate survives, turn it into a formal runner and extend to Cornell/Actor/
+Squirrel before method refinement.
+
+## 2026-06-22: LIFT-PROP-GCL novelty check is cautious, not paper-ready
+
+**Verdict**: proceed with caution; novelty score `5.5/10`.
+
+The direct novelty check found that LIFT-PROP cannot be framed as "using
+propagation for GCL" because PROPGCL already establishes training-free
+propagation as a strong graph contrastive learning mechanism. It also cannot
+claim feature-token graph construction because GRAPHITE covers that boundary.
+Other close risks include GNNEvaluator and When Do GNNs Help for label-free
+GNN usefulness estimation, GLANCE for label-free homophily routing, Less is
+More for graph/raw dual views, ASPECT for adaptive spectral GCL, and HLCL for
+feature-cosine heterophily filtering.
+
+The remaining defensible delta is narrow but real enough to test: a simple
+edge-lift statistic for raw-vs-`P^2X` abstention that uses no labels and matches
+the oracle K on 4/5 pilot datasets. This should be developed only if it can
+beat or complement PROPGCL's propagation-depth selection and transfer beyond
+the current five datasets.
+
+Recommended next action: build a formal `reproduce_lift_prop.py` runner, expand
+to Cornell/Actor/Squirrel, and compare the edge-lift gate against
+validation-selected K and simple graph metrics. Do not move to full paper
+writing yet.
+
+## 2026-06-22: LIFT-PROP extra validation is positive but incomplete
+
+**Verdict**: positive transfer signal; full Actor/Squirrel 10-split still needed.
+
+The formal `reproduce_lift_prop.py` runner was added and smoke-tested on
+Cornell split 0. Cornell 10-split then completed before the broader
+Cornell/Actor/Squirrel run was interrupted for runtime: the K2 edge-lift gate
+chooses raw K=0, matching oracle K and reaching `0.816216 +/- 0.059487`.
+
+Actor and Squirrel were checked on split 0. Actor behaves like WebKB: K=0 raw
+is best (`0.348684`) and the gate selects K=0 because `lift(P2X)=0.249076`.
+Squirrel behaves like Chameleon: K=2 is best (`0.571566`) and the gate selects
+K=2 because `lift(P2X)=0.446390`.
+
+Recommended next action: optimize the evaluator for Actor/Squirrel 10-split
+or use a faster C-grid, then compare LIFT-PROP against validation-selected K
+and PROPGCL-style propagation baselines.
+
+Follow-up fast-grid check (`C in {2^-4, 1, 2^4}`) completed Actor/Squirrel
+10-split. Actor remains a clean raw-protection hit: gate K=0 and oracle K=0,
+`0.347566`. Squirrel remains propagation-positive, but the fixed K2 gate is a
+near miss under the fast grid: K2 `0.509030` beats raw `0.328530`, while K1 is
+oracle at `0.520365`. This suggests LIFT-PROP should keep the edge-lift
+abstention gate but add a label-free K1/K2 selector when propagation is enabled.
+
+Selector v1 implements that fix: if `lift(P2X)<0.35`, choose K=0; otherwise if
+`lift(P2X) <= lift(PX)+0.02`, choose K=1; else choose K=2. On Actor/Squirrel
+fast-grid 10-split, v1 selects Actor K0 and Squirrel K1, matching oracle on
+both. Across the currently observed datasets/settings, v1 matches oracle on
+7/8 and validation-selected K on 7/8, with only Cora preferring K3 over
+selected K2 by `0.008768`.
+
+## 2026-06-22: CCR-SAFE residual safety is a diagnostic lead, not a method yet
+
+**Verdict**: promising diagnostic; not paper-ready.
+
+CCR-GCL produced a useful learned residual on Cora, but the first certificate
+accepted harmful residuals on CiteSeer, Chameleon, Texas, and Wisconsin. R095
+therefore tested safety policies on existing CCR checkpoints. The best rule,
+`stack_moderate_residual`, accepts residuals only when LIFT-Portfolio selected
+the stack and the residual has moderate graph alignment: residual edge-lift
+`>=0.2` and residual edge cosine `<=0.8`.
+
+On split 0, this accepts only Cora and improves LIFT-Portfolio from `0.842640`
+to `0.851869`; it rejects CiteSeer, Chameleon, Texas, and Wisconsin, preserving
+their portfolio results. The rule is still overfit-risky because thresholds
+were selected after inspecting the same diagnostic batch. Next action, if CCR
+continues, is fixed-threshold validation on fresh splits with CPU sklearn final
+probe numbers and GPU-only tensor diagnostics.
+
+## 2026-06-22: CCR-SAFE fails fresh-split validation
+
+**Verdict**: failed; restart main-method search.
+
+R096 froze the R095 `stack_moderate_residual` thresholds and trained fresh CCR
+checkpoints with CUDA. The route fails immediately on Cora: split 1 goes from
+LIFT-Portfolio `0.844024` to `0.832949` when the residual is accepted, and
+split 2 goes from `0.854638` to `0.850023`. CiteSeer split 1 is protected
+(`0.732156` preserved) because its residual edge cosine remains too high
+(`0.862810`) and the rule rejects the residual.
+
+This shows the split-0 Cora gain was not a stable learned complement. The
+remaining queue was stopped intentionally after three completed fresh
+checkpoints. CCR-SAFE should be kept only as negative evidence: residual
+complementarity must be validated on fresh splits before being used in any
+paper claim.
+
+## 2026-06-22: Spillover-Blocked BGRL fails split-0 gate
+
+**Verdict**: failed.
+
+SBB-BGRL preserves low raw-cosine neighbor messages in the GCN forward pass but
+stop-gradients those message paths. CUDA smoke passed and M1 split-0 completed.
+However, Cora drops from BGRL `0.832949` to `0.815413`, CiteSeer drops from
+`0.692712` to `0.688204`, and Chameleon drops from `0.438596` to `0.427632`.
+Texas/Wisconsin improve only over weak BGRL (`0.648649`, `0.568627`) and remain
+far below LIFT/raw (`0.810811`, `0.823529`).
+
+The lesson is that low raw edge cosine alone is too blunt for deciding which
+message paths should train. Do not tune SBB edge quantiles or expand to
+10-split.
+
+## 2026-06-22: LIFT view-set dispersion proxy fails
+
+**Verdict**: failed proxy; do not train.
+
+R098 appended propagation-view uncertainty/statistics over `[X,PX,P2X,P3X]` to
+LIFT-Portfolio. Cora has only a tiny local improvement with `portfolio_mean_std`
+(`0.842640 -> 0.844947`), while CiteSeer regresses (`0.725770 -> 0.720135`,
+and richer stats drop to `0.710368`) and Chameleon regresses strongly
+(`0.699561 -> 0.662281`). The run was stopped after Chameleon because the proxy
+had already failed.
+
+This also has novelty risk near IJCAI 2025 UGCL, which already uses sample
+uncertainty to coordinate graph augmentation and contrastive loss. Do not
+implement a GPU-trained view-set dispersion/conformal objective from this
+proxy.
+
+## 2026-06-22: LIFT low-rank bottleneck proxy fails
+
+**Verdict**: failed proxy; do not train.
+
+R099 tested randomized-SVD low-rank projections of LIFT-Portfolio before
+implementing a learned low-rank GCL objective. CiteSeer improves locally at
+rank 32 (`0.725770 -> 0.731781`), but Cora has no gain (`0.842640 -> 0.842178`
+best tested rank) and Chameleon regresses sharply (`0.699561 -> 0.651316`).
+Whitened low-rank coordinates are broadly harmful.
+
+This looks like a dataset-specific linear-probe regularization effect rather
+than a robust representation-learning mechanism. Low-rank GCL is also a nearby
+prior direction, so the novelty margin is weak. Do not spend GPU time on a
+learned low-rank objective from this proxy.
+
+## 2026-06-22: Sharpness-stable alignment is only a weak BGRL diagnostic
+
+**Verdict**: weak internal signal; not a main method.
+
+SSA-BGRL weights node-level BGRL alignment by stability under temporary
+online-parameter perturbations. CUDA smoke passed on Cora/Chameleon, and the
+200-epoch split-0 gate ran on Cora, CiteSeer, and Chameleon. Cora improves only
+from `0.832949` to `0.834333`, CiteSeer from `0.693088` to `0.696093`, and
+Chameleon is unchanged at `0.438596`. All are far below LIFT-Portfolio
+(`0.842640`, `0.725770`, `0.699561`).
+
+This shows that parameter-stability is measurable but too mild as a training
+signal. Stop SSA before Texas/Wisconsin and 10-split expansion.
+
+## 2026-06-22: LIFT-PROP metric ablation supports edge-lift
+
+**Verdict**: positive diagnostic.
+
+Across the eight observed settings, `lift(P2X)-lift(X)` correlates strongly
+with propagation gain `Acc(P2X)-Acc(X)`: Pearson `0.915337`, Spearman
+`0.880952`. Raw lift alone is weak, and propagated edge cosine alone is
+negatively correlated with gain because it also rises under global smoothing.
+
+This supports the mechanism: LIFT-PROP should not be framed as selecting high
+smoothness, but as selecting edge-specific alignment beyond random-pair
+alignment. Next diagnostic should add degree/density/effective-rank baselines
+and bootstrap uncertainty.
+
+## 2026-06-22: LIFT-PROP beats PROPGCL reported-step heuristic, but not learned PROPGCL yet
+
+**Verdict**: R076 first pass positive; learned PROPGCL remains the next prior.
+
+PROPGCL defines PROP as `A_hat^K X` and reports in Appendix E that K=1 is best
+for Cora/CiteSeer/Chameleon/Squirrel, while K=0 is enough for
+Texas/Wisconsin/Cornell/Actor/CS. Using that reported-step heuristic on our
+current K-sweep settings gives mean test `0.686911` and mean oracle gap
+`0.011052`.
+
+LIFT-PROP v1 reaches mean test `0.696868`, mean oracle gap `0.001096`, exact
+oracle hits `7/8`, and within-0.02 oracle `8/8`. The main gains over the
+PROPGCL reported heuristic are Cora (`+0.022612`), CiteSeer (`+0.011645`), and
+Chameleon (`+0.045395`), where current protocol prefers K2 over K1.
+
+This supports LIFT-PROP as a label-free selector / reliability gate, but it
+does not beat learned `PROP-GRACE` or `PROP-DGI`. Next step should compare
+against learned propagation coefficients or position PROPGCL as the learned
+upper-neighbor and LIFT-PROP as a training-free abstention selector.
+
+## 2026-06-22: Cycle-Balance Gated LIFT is downgraded after sign controls
+
+**Verdict**: positive-path baseline only; not a main method.
+
+R102/R103 tested feature-induced signed path channels on top of the protected
+LIFT-Portfolio baseline. The method activates only when the portfolio selects
+`single_k2_low_raw_lift`; otherwise it falls back to the exact portfolio
+representation. On Chameleon, the full C-grid 10-split result improves from
+`0.685526 +/- 0.021292` to `0.725877 +/- 0.019174`. Split-0 checks protect
+Cora/CiteSeer/Texas/Wisconsin, and extra split-0 checks protect
+Squirrel/Actor/Cornell.
+
+R104/R105 invalidated the signed/balance-theory mechanism. The median-cosine
+threshold on Chameleon degenerates to all-positive signs (`pos_ratio=1.0`), so
+the strongest result is better explained as positive/no-self propagation-path
+augmentation. True rank-based 50/50 signs reach only `0.685526` fast-grid;
+random signs reach `0.642763`; rank-global shuffle reaches `0.645395`; and
+rank-node shuffle reaches `0.667105`.
+
+Do not implement a trained Cycle-Balance objective. Keep Positive-Path /
+No-self LIFT as a required diagnostic baseline and restart the main-method
+search.
+
+## 2026-06-22: Depth-disagreement BGRL fails split-0 gate
+
+**Verdict**: failed split-0 gate; do not expand.
+
+R106/R107 implemented DDC-BGRL with a depth-trace encoder. The variants either
+weight BGRL node losses by shallow/deep representation disagreement or add an
+auxiliary shallow-depth alignment target. CUDA smoke passed, but the 200-epoch
+split-0 evidence is weak or negative:
+
+| Dataset | Control | Best DDC | Delta | Decision |
+|---|---:|---:|---:|---|
+| Cora | 0.802953 | 0.811260 | +0.008306 | weak internal only |
+| CiteSeer | 0.677310 | 0.678062 | +0.000751 | fail |
+| Chameleon | 0.394737 | 0.385965 | -0.008772 | fail |
+
+The route is also close to oversmoothing/depth-aware GCL prior work such as
+BlockGCL and stage-aware GCL. Do not run DDC 10-split or WebKB.

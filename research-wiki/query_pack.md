@@ -25,19 +25,22 @@ _Field gaps with stable IDs._
 - **Compatibility-Calibrated Contrastive Edges**: KILLED as standalone. Kept only as a routing signal inside NFR-GCL.
 - **NFR-GCL: Node-Frequency Routed Graph Contrastive Learning**: ABANDONED / ARCHIVED. After a novelty scan on 2026-06-21, the idea was judged too close to recent node-level adaptive spectral fusion work for graph contrastive learning.
 ## Key Papers (14 total)
-- [paper:chen2024_leveraging_contrastive_learning] Leveraging Contrastive Learning for Enhanced Node Representations in Tokenized Graph Transformers: _TODO: fill in after reading._
+- [paper:chen2024_leveraging_contrastive_learning] Leveraging Contrastive Learning for Enhanced Node Representations in Tokenized Graph Transformers: GCFormer 用正负 token 序列和 contrastive learning 提升 tokenized graph Transformer 的节点表示。
 - [paper:hou2023_graphmae2] GraphMAE2: A Decoding-Enhanced Masked Self-Supervised Graph Learner
-- [paper:lee2025_similarities_embeddings_contrastive] On the Similarities of Embeddings in Contrastive Learning: _TODO: fill in after reading._
+- [paper:lee2025_similarities_embeddings_contrastive] On the Similarities of Embeddings in Contrastive Learning: 该文用 cosine similarity 统一分析 contrastive embeddings，并提出降低 mini-batch negative similarity 方差的辅助损失。
 - [paper:li2026_aspect] ASPECT: Node-Level Adaptive Spectral Fusion for Graph Contrastive Learning
 - [paper:shan2026_revisiting_positive_samples] Revisiting Positive Samples in Graph Contrastive Learning: From the Perspective of Message Passing
 - [paper:skenderi2023_graph_jepa] Graph-level Representation Learning with Joint-Embedding Predictive Architectures
 - [paper:srinivasan2025_predict_cluster_refine] Predict, Cluster, Refine: A Joint Embedding Predictive Self-Supervised Framework for Graph Representation Learning
-- [paper:thakoor2021_largescale_representation_learning] Large-Scale Representation Learning on Graphs via Bootstrapping: _TODO: fill in after reading._
-- [paper:wang2022_augmentationfree_graph_contrastive] Augmentation-Free Graph Contrastive Learning with Performance Guarantee: _TODO: fill in after reading._
-- [paper:wang2025_khangcl_kolmogorovarnold_network] Khan-GCL: Kolmogorov-Arnold Network Based Graph Contrastive Learning with Hard Negatives: _TODO: fill in after reading._
-- [paper:yang2023_graph_contrastive_learning] Graph Contrastive Learning under Heterophily via Graph Filters: _TODO: fill in after reading._
-- [paper:zhu2020_deep_graph_contrastive] Deep Graph Contrastive Representation Learning: _TODO: fill in after reading._
-## Recent Relationships (26 total)
+- [paper:thakoor2021_largescale_representation_learning] Large-Scale Representation Learning on Graphs via Bootstrapping: BGRL 用 bootstrap prediction 替代负样本对比，在图表示学习中实现可扩展的自监督训练。
+- [paper:wang2022_augmentationfree_graph_contrastive] Augmentation-Free Graph Contrastive Learning with Performance Guarantee: AF-GCL 用 GNN 聚合特征构造自监督信号，避免传统 graph augmentations 对高频异配信息的破坏。
+- [paper:wang2025_khangcl_kolmogorovarnold_network] Khan-GCL: Kolmogorov-Arnold Network Based Graph Contrastive Learning with Hard Negatives: Khan-GCL 将 KAN encoder 与语义 hard negatives 结合，用于提升 graph-level contrastive representation。
+## Recent Relationships (31 total)
+  idea:dca_gcl --addresses_gap--> gap:G4
+  idea:dca_gcl --addresses_gap--> gap:G3
+  idea:dca_gcl --boundary_condition--> paper:shan2026_revisiting_positive_samples
+  idea:dca_gcl --boundary_condition--> paper:li2026_aspect
+  idea:dca_gcl --supersedes--> idea:dcgcl
   idea:dcgcl --addresses_gap--> gap:G4
   idea:dcgcl --addresses_gap--> gap:G3
   idea:dcgcl --addresses_gap--> gap:G2
@@ -48,8 +51,3 @@ _Field gaps with stable IDs._
   idea:dcgcl --inspired_by--> paper:zhuo2024_improving_graph_contrastive_learning
   idea:srlp_gcl --inspired_by--> paper:li2026_aspect
   idea:srlp_gcl --inspired_by--> paper:shan2026_revisiting_positive_samples
-  idea:srlp_gcl --inspired_by--> paper:srinivasan2025_predict_cluster_refine
-  idea:srlp_gcl --inspired_by--> paper:hou2023_graphmae2
-  idea:srlp_gcl --inspired_by--> paper:skenderi2023_graph_jepa
-  idea:srlp_gcl --inspired_by--> paper:thakoor2021_largescale_representation_learning
-  idea:srlp_gcl --addresses_gap--> gap:G6

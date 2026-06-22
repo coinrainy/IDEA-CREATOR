@@ -1,39 +1,70 @@
-# Experiment Tracker: RSP-GCL
+# Experiment Tracker: Post-TDGCL Pilot Queue
 
-| Run ID | Milestone | Purpose | Variant | Split | Metrics | Priority | Status | Notes |
-|---|---|---|---|---|---|---|---|---|
-| R001-R013 | historical | SRLP/DCGCL/FTDR gates | multiple | multiple | node classification | historical | STOP | archived in timestamped result files |
-| R014 | M1 | CFR pilot | CFR-BGRL | Cora/Chameleon/Texas/Wisconsin split 0 | test@best | historical | FAIL | stable but non-positive |
-| R015-R020 | M2/M3 | RFA feature-retention gates | RFA-BGRL | split 0 and 10-split | raw/graph/RFA test | historical | BASELINE | strong diagnostic, not final method |
-| R021 | M1 | ORFA split-0 gate | ORFA-GCL | Cora/Chameleon/Texas/Wisconsin split 0 | ORFA/raw/graph/residual test | historical | FAIL | Cora pass, Chameleon fail, Texas below raw, Wisconsin raw tie |
-| R022 | M2 | ORFA Chameleon long gate | ORFA-GCL | Chameleon split 0, 1000 epoch | test@best | historical | FAIL | 0.484649, below RFA |
-| R023 | M1 | trainable high-pass/low-pass gate | BiFilter-BGRL | Cora/Chameleon/Texas/Wisconsin split 0 | low/high/fused test | historical | FAIL | naive high-pass branch regressed |
-| R024 | M2 | post-hoc filter-bank Chameleon gate | FBA post-hoc | Chameleon splits 0-9 | mean +/- std | historical | EDGE-PASS | `graph+raw+0.5H1` and `graph+raw+P4` both mean 0.500219 |
-| R025 | M0 | reusable evaluator | FBA/DCA evaluator | reproduce R024 | csv parity | historical | DONE | `evaluate_filterbank_anchor.py` reproduces post-hoc results |
-| R026 | M1 | fixed family split-0 gate | FBA fixed candidates | Cora/CiteSeer/Chameleon/Texas/Wisconsin split 0 | valid/test | historical | DONE | strong Cora, small CiteSeer, heterophily raw/graph dependent |
-| R027 | M2 | Chameleon fixed 10-split gate | FBA fixed candidates | Chameleon splits 0-9 | mean +/- std | historical | EDGE-PASS | only narrow positive |
-| R028 | M3 | anchor-alignment auxiliary split-0 | FBA train | Cora/CiteSeer/Chameleon/Texas/Wisconsin split 0 | test@best | historical | PARTIAL | Cora strong, CiteSeer small positive, heterophily not enough |
-| R029 | M4 | anchor-alignment auxiliary 10-split | FBA-high1 train | Chameleon splits 0-9, 1000 epoch | mean +/- std | historical | FAIL | FBA `0.487061` vs graph_raw `0.493202`; no NaN/collapse |
-| R030 | M0 | semantic-boundary alternative | SBN-GCL | Cora/Chameleon/Texas/Wisconsin split 0 | graph/fused/raw test | MUST | FAIL | Cora weak positive only; Chameleon/Texas/Wisconsin fail |
-| R031 | M1 | deferred complementary anchor fixed family | DCA-GCL | Chameleon 10 splits; Cora/CiteSeer split 0; Texas/Wisconsin 10 splits | mean/test | MUST | EDGE-PASS | Chameleon `0.505044`, Cora/CiteSeer positive; Texas/Wisconsin raw-dominant |
-| R032 | M2 | novelty/method review | DCA-GCL | paper-only review | verdict | MUST | FAIL | novelty score 3/10; keep DCA diagnostic-only |
-| R033 | M0 | semantic anchor rescue proxy | Semantic kNN anchor | Cora/CiteSeer/Chameleon/Texas/Wisconsin split 0 | valid/test | SHOULD | FAIL | small Cora/CiteSeer signal only; no decisive heterophily win |
-| R034 | M0 | whitening rescue proxy | ZCA/whitening | split-0 quick proxy | runtime/test | SHOULD | FAIL | timed out in 120s and novelty is covered by GCL-GroW/GWGCL |
-| R035 | M0/M1 | sparse local transport proxy | VST-GCL default | Cora/Chameleon/Texas/Wisconsin split 0 | test@best | MUST | FAIL | stable but Chameleon/Texas/Wisconsin fail decisive controls |
-| R036 | M1 ablation | low-weight transport auxiliary | VST-GCL low aux | Cora/Chameleon split 0 | test@best | SHOULD | FAIL | Chameleon fused 0.467105, no positive mechanism signal |
-| R037 | diagnostic | counterfactual edge masks split-0 | CIG/CLEAR proxy | Cora/Chameleon/Texas/Wisconsin split 0 | fused test | SHOULD | PARTIAL_FAIL | only Wisconsin split 0 positive; Chameleon no signal |
-| R038 | diagnostic | counterfactual edge masks 10-split | CIG/CLEAR proxy | Texas/Wisconsin splits 0-9 | mean fused test | SHOULD | FAIL | best fixed and validation-selected masks below raw baselines |
-| R039 | M0 | role-signature proxy split-0 | RSP role anchor | Cora/Chameleon/Texas/Wisconsin split 0 | valid/test | MUST | PARTIAL_PASS | Chameleon full role 0.596491; Texas/Wisconsin below raw |
-| R040 | M1 | Chameleon role-signature proxy 10-split | RSP role anchor | Chameleon splits 0-9 | mean +/- std | MUST | PASS | full role 0.585965 vs graph_raw 0.496711 and DCA 0.505044 |
-| R041 | M1 | RSP training split-0 | RSP-GCL | Chameleon/Texas/Wisconsin split 0 | graph/fused/role-fused test | MUST | PARTIAL_PASS | Chameleon role-fused 0.596491; Texas/Wisconsin require gate |
-| R042 | M2 | Chameleon RSP training 10-split | RSP-GCL | Chameleon splits 0-9 | role-fused mean +/- std | MUST | PASS_WITH_LIMIT | role-fused 0.573684 +/- 0.026265; no NaN/collapse; gain mostly from static role signature |
-| R043 | M3 | validation-selected RSP representation gate | RSP-GCL | Chameleon/Texas/Wisconsin splits 0-9 | selected test mean | MUST | PARTIAL_FAIL | Chameleon selects role 10/10 and reaches 0.574781; Texas/Wisconsin mostly fall back to raw with no gain |
-| R044 | M4 | direct novelty gate | RSP-GCL | paper-only check | closest prior overlap | MUST | FAIL | GALE, WLGCL, and SPGCL make generic role/WL positive-sampling claim insufficiently novel |
-| R045 | M0 | TD-GCL smoke | TD-GCL | Cora/Chameleon split 0, 5 epoch | NaN/collapse | SHOULD | PASS | dynamic loss warmup inactive; no runtime or collapse issue |
-| R046 | M1 | TD-GCL split-0 pilot | TD-GCL lambda_dyn=0.2 | Cora/Chameleon/Texas/Wisconsin split 0 | test@best | SHOULD | PARTIAL_PASS | Cora +3.09, Chameleon +1.10 vs no-dyn; Texas/Wisconsin no gain |
-| R047 | M1 ablation | TD-GCL strength check | lambda_dyn=0.0/0.5 | Cora/Chameleon/Texas/Wisconsin split 0 | test@best delta | SHOULD | PARTIAL_PASS | lambda 0.5 improves Cora to 0.842640 but hurts Texas |
-| R048 | M1 ablation | TD-GCL CiteSeer check | lambda_dyn=0.0/0.5 | CiteSeer fixed split | test@best delta | SHOULD | PARTIAL_PASS | CiteSeer improves 0.712622 -> 0.729527 |
+**Date**: 2026-06-22 21:02
+**Subagent reviewer policy**: disabled for ad-hoc reviewer/code-review subagents only.
 
-## Active Rule
-
-No candidate is currently `READY_TO_REFINE`. RSP-GCL is downgraded to a diagnostic baseline after R042-R044. TD-GCL is `SPECULATIVE_INCUBATE`: it has homophily split-0 signal but needs novelty and robustness gates. Do not expand RSP, DCA, VST, CIG, CLEAR, or TD-GCL to external baselines yet.
+| Run ID | Candidate | Variant | Dataset(s) | Split(s) | Status | Result | Notes |
+|---|---|---|---|---|---|---|---|
+| R049 | NPG-GCL | npg smoke | Cora, Chameleon | 0 | done | passed | no NaN/collapse |
+| R050 | NPG-GCL | bgrl_control | Cora, CiteSeer, Chameleon, Texas, Wisconsin | 0 | done | control logged | same-run no-gain control |
+| R051 | NPG-GCL | npg | Cora, CiteSeer, Chameleon, Texas, Wisconsin | 0 | done | weak signal | Cora +0.0037, Chameleon +0.0044, WebKB tie |
+| R052 | NPG-GCL | uniform_gain | Cora, Chameleon | 0 | done | mixed | Cora close to NPG, Chameleon equals control |
+| R053 | NPG-GCL | random_gain | Cora, Chameleon | 0 | done | mixed/fail | random beats NPG on Cora; NPG beats random on Chameleon |
+| R054 | NPG-GCL | npg 3-split | Cora, CiteSeer, Chameleon, Texas, Wisconsin | 0,1,2 | skipped | not promoted | NPG did not pass split-0 strength gate |
+| R055 | SC-BGRL | fixed-sign smoke | Cora, Chameleon | 0 | done | passed | initial sign threshold degenerated on Chameleon |
+| R056 | SC-BGRL | rank-fix smoke | Chameleon | 0 | done | passed | forced 50/50 same/different edge split |
+| R057 | SC-BGRL | rank-fix fair pilot | Cora, Chameleon, Texas, Wisconsin | 0 | done | failed | Cora/Chameleon regress; WebKB tie |
+| R058 | GDC-GCL+ | gdc smoke | Cora, Chameleon | 0 | done | passed | no NaN/collapse |
+| R059 | GDC-GCL+ | bgrl_control vs gdc_residual | Cora, CiteSeer, Chameleon, Texas, Wisconsin | 0 | done | failed | only weak Chameleon gain; Cora/CiteSeer fail; WebKB tie |
+| R060 | GDC-GCL+ | td_direction comparison | Cora, CiteSeer, Chameleon | 0 | done | failed | no meaningful recovery of earlier TD-GCL signal |
+| R061 | GDC-GCL+ | 3-split expansion | Cora, CiteSeer, Chameleon | 0,1,2 | skipped | not promoted | GDC did not pass split-0 strength gate |
+| R062 | LIFT-PROP-GCL | factor-token proxy | Cora, CiteSeer, Chameleon, Texas, Wisconsin | mixed | done | diagnostic | feature-token useful but not lead; GRAPHITE novelty risk |
+| R063 | LIFT-PROP-GCL | raw/graph/feature hetero10 core | Chameleon, Texas, Wisconsin | 0-9 | done | positive | Chameleon `P^2X` 0.685526; WebKB raw dominates |
+| R064 | LIFT-PROP-GCL | raw/graph/feature homophily split0 | Cora, CiteSeer | 0 | done | positive | graph/feature propagation beats raw |
+| R065 | LIFT-PROP-GCL | K=0..3 lift sweep | Cora, CiteSeer, Chameleon, Texas, Wisconsin | mixed | done | active | K2 edge-lift gate selects oracle K on 4/5 datasets |
+| R066 | LIFT-PROP-GCL | novelty check | PROPGCL, Less is More, ASPECT, GRAPHITE, GNNEvaluator, When Do GNNs Help, GLANCE, HLCL | - | done | proceed with caution | novelty `5.5/10`; direct PROPGCL-facing validation required |
+| R067 | LIFT-PROP-GCL | formal runner smoke | Cornell | 0 | done | passed | `reproduce_lift_prop.py` summary selects K=0 oracle |
+| R068 | LIFT-PROP-GCL | extra hetero10 attempt | Cornell, Actor, Squirrel | 0-9 | partial | Cornell done; Actor slow | interrupted after Cornell due slow Actor linear eval |
+| R069 | LIFT-PROP-GCL | extra split-0 check | Actor, Squirrel | 0 | done | positive | Actor selects raw oracle; Squirrel selects K=2 oracle |
+| R070 | LIFT-PROP-GCL | fast-grid extra 10-split | Actor, Squirrel | 0-9 | done | mixed-positive | Actor K0 oracle; Squirrel K2 beats raw but K1 is oracle |
+| R071 | LIFT-PROP-GCL | selector v1 fast-grid | Actor, Squirrel | 0-9 | done | positive | plateau-aware K1/K2 selector hits oracle on both |
+| R072 | LIFT-PROP-GCL | selector v1 aggregate summary | 8 observed settings | mixed | done | positive | v1 hits oracle on 7/8; Cora near miss by 0.0088 |
+| R073 | LIFT-PROP-GCL | validation-selected comparison | 8 observed settings | mixed | done | positive | v1 matches validation-selected K on 7/8 without labels |
+| R074 | LIFT-PROP-GCL | metric ablation first pass | 8 observed settings | mixed | done | positive | `delta_lift_k2_k0` Pearson 0.915 / Spearman 0.881 with K2 gain |
+| R076 | LIFT-PROP-GCL | PROPGCL-facing selector comparison | 8 observed settings | mixed | done-first-pass | positive | v1 mean oracle gap 0.0011 vs PROPGCL reported-step heuristic 0.0111 |
+| R077 | LIFT-PROP-GCL | edge-NCE learned propagation mix | Cora, CiteSeer, Chameleon, Texas, Wisconsin | 0 | done | failed | Cora improves locally, but CiteSeer/Chameleon regress; LIFT gate only protects WebKB by falling back to raw |
+| R078 | LIFT-PROP-GCL | node-wise LIFT routing | Cora, CiteSeer, Chameleon, Texas, Wisconsin | 0 fast grid | done | failed | Cora node-soft improves, but Chameleon/WebKB regress; row-wise K routing breaks broad representation consistency |
+| R079 | LIFT-Stack | split-0 fast gate | Cora, CiteSeer, Chameleon, Texas, Wisconsin | 0 | done | positive | LIFT-gated stack improves Cora/CiteSeer and weakly Chameleon; protects WebKB raw |
+| R080 | LIFT-Stack | heterophily fast gate | Chameleon, Texas, Wisconsin, Cornell, Actor, Squirrel | 0-9 | done | positive/low-novelty | Chameleon +0.0070, Squirrel +0.0233, raw-dominant graphs protected |
+| R081 | LIFT-Stack | homophily 10-seed gate | Cora, CiteSeer | 0-9 random splits | done | positive/low-novelty | Cora +0.0158 and CiteSeer +0.0305 vs global LIFT; SIGN/FAF/PROPGCL novelty risk high |
+| R082 | LIFT-HC-GCL | hop-drop contrastive smoke | Cora, Chameleon | 0 | done | passed/mixed | script works; short smoke showed Cora/Chameleon local gains but needed formal gate |
+| R083 | LIFT-HC-GCL | main split-0 gate | Cora, CiteSeer, Chameleon, Texas, Wisconsin | 0 | done | failed/mixed | Cora/Wisconsin positive, Texas protected, CiteSeer/Chameleon regress vs LIFT-Stack |
+| R084 | LIFT-HC-GCL | short-training probe | Cora, CiteSeer, Chameleon | 0 | done | failed/mixed | 20 epoch helps Cora/CiteSeer slightly but still hurts Chameleon; 5 epoch not robust |
+| R085 | LIFT-Stack + checkpoint residual | existing BGRL/GDC/TD encoder concat | Cora, CiteSeer, Chameleon, Texas, Wisconsin | 0 | done | failed | Cora improves, but CiteSeer/Chameleon/WebKB regress; learned checkpoint branch is not a stable complement to LIFT-Stack |
+| R086 | LIFT Channel Gate | channel-wise edge-lift weights over LIFT-Stack | Cora, CiteSeer, Chameleon, Squirrel, WebKB, Actor | mixed | done | failed/diagnostic | Chameleon split-0 softplus improves, but 10-split is neutral and Squirrel relu regresses; keep as diagnostic only |
+| R087 | LIFT interaction features | fixed `X*P^kX`, `|P^kX-X|`, and delta blocks | Cora, CiteSeer, Chameleon | 0 fast grid | done | failed | Cora/CiteSeer get tiny variant-specific gains, but Chameleon fails; do not expand fixed-feature micro-tuning |
+| R088 | LIFT-Portfolio | raw/P2/stack selector with low-raw-lift guard | Cora, CiteSeer, Chameleon, Squirrel, WebKB, Actor, Cornell | mixed | done | positive baseline | fixes Chameleon full-grid by choosing P2, keeps Cora/CiteSeer/Squirrel stack gains and raw protection; still low novelty |
+| R089 | EPI-BGRL | GPU smoke for label-free environment-balanced BGRL | Cora, Chameleon | 0 | done | passed | CUDA training confirmed; no NaN/collapse; smoke only, environment loss mostly inactive |
+| R090 | EPI-BGRL | `epi_balanced_rex` vs BGRL control | Cora, CiteSeer, Chameleon, Texas, Wisconsin | 0 | done | failed | Cora improves over BGRL but remains below LIFT-Portfolio; CiteSeer/Chameleon regress; WebKB ties BGRL and is far below raw/LIFT |
+| R091 | PAB-BGRL | `pab_soft` CUDA smoke | Cora, Chameleon | 0 | done | passed | CUDA training confirmed; no NaN/collapse; smoke only |
+| R092 | PAB-BGRL | `pab_soft` vs BGRL control | Cora, CiteSeer, Chameleon, Texas, Wisconsin | 0 | done | internal signal only | CiteSeer/Chameleon/Texas improve over BGRL, but all remain far below LIFT-Portfolio/raw controls; no 10-split |
+| R093 | CCR-GCL | LIFT-Portfolio teacher + orthogonal residual smoke | Cora, Chameleon | 0 | done | passed/risky | CUDA training confirmed; Cora pipeline works; Chameleon residual concat already hurts P2 teacher |
+| R094 | CCR-GCL | `ccr_orth_var` split-0 residual gate | Cora, CiteSeer, Chameleon, Texas, Wisconsin | 0 | done | failed certification | Cora improves over portfolio, but certification admits harmful residuals on CiteSeer/Chameleon/WebKB; no 10-split |
+| R095 | CCR-SAFE | label-free residual safety policies over R094 checkpoints | Cora, CiteSeer, Chameleon, Texas, Wisconsin | 0 | done | promising diagnostic | `stack_moderate_residual` accepts only Cora and protects CiteSeer/Chameleon/WebKB, but thresholds need fresh-split validation |
+| R096 | CCR-SAFE | fixed-threshold fresh-split validation | Cora 1-2, CiteSeer 1 | partial-stopped | failed | CUDA training completed for 3 fresh checkpoints; `stack_moderate_residual` hurts Cora splits 1-2, protects only CiteSeer split 1; remaining queue stopped |
+| R097 | SBB-BGRL | spillover-blocked message stop-gradient | Cora, CiteSeer, Chameleon, Texas, Wisconsin | 0 | done | failed | CUDA smoke and M1 passed engineering, but Cora/CiteSeer/Chameleon regress; WebKB gains are weak and far below LIFT/raw |
+| R098 | LIFT View-Set Dispersion | fixed propagation-view uncertainty/statistics proxy | Cora, CiteSeer, Chameleon | 0 | partial-stopped | failed | Cora tiny gain, CiteSeer and Chameleon regress; stopped before full grid due decisive proxy failure |
+| R099 | LIFT Low-Rank Bottleneck | randomized-SVD low-rank proxy over LIFT-Portfolio | Cora, CiteSeer, Chameleon | 0 | partial-stopped | failed | CiteSeer small-rank gain, but Cora no gain and Chameleon drops sharply; no learned low-rank GCL |
+| R100 | SSA-BGRL | sharpness-stable alignment smoke | Cora, Chameleon | 0 | done | passed | CUDA smoke passed for `ssa_weight` and `ssa_consistency`; no NaN/collapse |
+| R101 | SSA-BGRL | parameter-perturbation stability weighted BGRL | Cora, CiteSeer, Chameleon | 0 | partial-stopped | weak/fail | Cora/CiteSeer tiny BGRL-internal gains, Chameleon no gain; stopped before Texas/Wisconsin |
+| R102 | Cycle-Balance Gated LIFT | feature-induced signed path proxy | Cora, CiteSeer, Chameleon, Texas, Wisconsin | 0 | done | positive-gated | protects Cora/CiteSeer/WebKB; Chameleon improves `0.699561 -> 0.717105` with signed-all |
+| R103 | Cycle-Balance Gated LIFT | Chameleon 10-split full-grid confirmation + extra scope split0 | Chameleon 0-9; Squirrel/Actor/Cornell split 0 | done | active candidate | Chameleon full-grid `0.685526 -> 0.725877`; Squirrel/Actor/Cornell protected unchanged; novelty risk remains high |
+| R104 | Cycle-Balance Gated LIFT | component ablations | Chameleon | 0-9 fast grid; split-0 full grid | done | reframed | `pos_ratio=1.0`; strongest component is positive/no-self `pos1`, not negative/balance path |
+| R105 | Cycle-Balance Gated LIFT | sign randomization and rank-split controls | Chameleon | 0-9 fast grid | done | signed claim failed | cosine/global/node shuffle identical due all-positive signs; rank 50/50 only `0.685526`; random/shuffled signs fail |
+| R106 | DDC-BGRL | depth-disagreement CUDA smoke | Cora, Chameleon | 0 | done | passed | `ddc_control`, `ddc_weight`, `ddc_aux` all run on CUDA with no NaN/collapse |
+| R107 | DDC-BGRL | depth-disagreement split-0 gate | Cora, CiteSeer, Chameleon | 0 | done | failed | Cora weak same-architecture gain; CiteSeer tiny; Chameleon regresses and remains far below BGRL/LIFT |
+| R108 | MFS-GCL | node-wise missing-feature stress CUDA smoke | Cora, Chameleon | 0 | done | passed | `mfs_clean` and `mfs_aux` run on CUDA with no NaN/collapse |
+| R109 | MFS-GCL | missing-feature stress split-0 gate | Cora, CiteSeer, Chameleon | 0 | done | failed | Cora local positive below LIFT; CiteSeer nearly flat; Chameleon tiny BGRL-internal gain but far below Positive-Path |
+| R110 | Ego-NoSelf BGRL | no-self GCNConv CUDA smoke | Cora, Chameleon | 0 | done | passed-engineering/weak | `ego_noself` runs on CUDA with no NaN/collapse but short-run accuracy is poor |
+| R111 | Ego-NoSelf BGRL | direct no-self BGRL split-0 gate | Cora, CiteSeer, Chameleon | 0 | done | failed | all three datasets regress vs BGRL; Chameleon collapses in accuracy without numerical collapse |
+| R112 | PUAB-GCL workerB | pair-utility positive-abstention BGRL | Cora, CiteSeer, Chameleon | 0 | done | failed | worker fork only; CUDA training + sklearn probe; Cora/CiteSeer regress slightly and Chameleon regresses below BGRL |
