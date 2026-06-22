@@ -16,3 +16,4 @@ _Append-only timeline._
 - `2026-06-21` idea-discovery survey: mapped cross-domain methods transferable to graph contrastive learning; strongest follow-up directions are latent prediction, invariant-environment contrast, and optimal-transport soft alignment.
 - `2026-06-21T18:53:14+08:00` idea-discovery selected SRLP-GCL as the active latent-prediction GCL direction; status is paper-only ACTIVE / ready for pilot, with no GPU result yet.
 - `2026-06-21T19:15:58+08:00` research-refine completed two reviewer rounds for SRLP; final score 7.35/10, verdict READY for pilot, with final proposal saved at `refine-logs/FINAL_PROPOSAL.md`.
+- `2026-06-22T13:35:00+08:00` idea-discovery added DCA-GCL as the current empirical lead after SBN failed and DCA showed Chameleon/Cora/CiteSeer edge-positive results; `research_wiki.py` was not available in the Windows session, so `index.md` and `query_pack.md` were not rebuilt.

@@ -1,163 +1,82 @@
-# Research Proposal: SRLP-Aux
+# Current Proposal Status: No Ready Proposal After RSP Gate
 
-## Status
+**Date**: 2026-06-22  
+**Status**: `NO_READY_METHOD`; RSP-GCL is `DIAGNOSTIC_ONLY_AFTER_GATE`  
+**Candidate**: RSP-GCL, Role-Signature Positive Graph Contrastive Learning  
 
-SRLP residual-only pilot did not pass the M2 split-0 gate. The current version is therefore downgraded and revised to **SRLP-Aux: Shortcut-Resistant Latent Prediction as an energy-gated residual auxiliary objective**.
+## Gate Outcome
 
-The revised thesis is deliberately conservative: full latent prediction remains the semantic anchor, while the shortcut-resistant residual is used as a small, energy-gated auxiliary bias. This keeps the useful stability of FullLatent-Iso and only asks the residual target to contribute marginal anti-shortcut pressure.
+RSP-GCL should not be refined into a paper proposal in its current form.
+
+| Gate | Result | Decision |
+|---|---:|---|
+| Chameleon 10-split RSP training | role-fused `0.573684 +/- 0.026265` | conditional positive |
+| Chameleon validation-selected gate | `0.574781 +/- 0.023321`, role selected 10/10 | positive |
+| Texas validation-selected gate | `0.827027` vs raw `0.829730` | no gain |
+| Wisconsin validation-selected gate | `0.827451` vs raw `0.839216` | no gain |
+| Novelty check | GALE/WLGCL/SPGCL overlap | fail for main claim |
+
+RSP remains useful as a diagnostic role-signature baseline, especially for
+Chameleon-like graphs. It is not the final graph contrastive learning method.
 
 ## Problem Anchor
 
-- **Bottom-line problem**: 设计一个用于节点分类的图自监督方法，使正目标真正提供有用学习信号，而不是被普通消息传递或同节点增强视图对齐提前平凡化。
-- **Must-solve bottleneck**: 当前 GCL 常把同一节点的两个增强视图当作正样本；在 GNN 消息传递后，这种正样本相似性可能已经由邻域平滑自然产生，导致目标学习低信息量一致性，尤其难以解释异配图上的收益。
-- **Non-goals**: 不继续 NFR-GCL 的节点级频率路由主线；不声称通用 graph JEPA 或 latent prediction 本身新；不引入 LLM 文本教师、大图预训练或新的大模型栈；不把复杂实验矩阵当作贡献。
-- **Constraints**: 第一版必须嵌入现有 `baselines/` 节点分类评测；异配图必须使用 Geom-GCN 官方固定划分；本地 4060 8GB 友好；优先单进程顺序运行；不构造稠密 `N x N` 矩阵；新增训练组件尽量为零。
-- **Success condition**: 修订目标在小图 split-0 gate 中不 collapse，优于 residual-only SRLP，并在 Chameleon/Texas/Wisconsin/Actor/CiteSeer 中至少展示若干个相对 FullLatent/ZPZ 的非偶然正信号。
+Current graph contrastive learning methods often fail on heterophilic node classification because they assume one of a few crowded mechanisms:
 
-## Experiment-Driven Diagnosis
+- adjacent nodes or raw-feature kNN nodes are useful positives;
+- low/high spectral channels can be mixed into a robust representation;
+- prototypes or latent residual targets capture task-relevant identity;
+- edge perturbation or transport can repair local neighborhoods.
 
-Residual-only SRLP 的 hard isolation 泄漏探针成立，但下游分类不成立：
+These routes either failed in this workspace or are too close to recent literature. The new anchor is narrower:
 
-- hard isolation 能显著降低 leakage probe cosine。
-- 纯 residual target 在 Cora、Texas、Wisconsin、Actor、Chameleon 1000 上低于最强 target-family 消融。
-- 失败不来自 NaN、collapse 或 skipped ratio，而来自目标定义：`R = z - q q^T z` 过窄、过难，且可能丢掉类别相关语义。
-
-因此，旧 claim “context-projected residual can replace full latent prediction” 降级为：
-
-> A context-projected residual can act as a lightweight auxiliary signal that regularizes full latent prediction against trivial context shortcuts.
+> Some heterophilic graphs, especially Chameleon in the current evidence, are better explained by nonlocal structural role equivalence than by raw-feature similarity, adjacency, or spectral low/high mixing.
 
 ## Method Thesis
 
-**One-sentence thesis**: SRLP-Aux 用完整 teacher latent 保留语义主锚，再加入能量门控的 context-projected residual 辅助项，使训练目标在保持 FullLatent 稳定性的同时获得有限的 shortcut-resistant bias。
+RSP-GCL builds a role signature for each node from:
 
-This is the smallest adequate revision because it:
+1. local structural statistics;
+2. WL-hash neighborhood patterns;
+3. landmark diffusion responses.
 
-- keeps the same encoder, EMA teacher, predictor, split protocol, and hard isolation machinery;
-- does not add a new backbone, contrastive module, router, negative miner, or dense propagation matrix;
-- changes only the self-supervised target definition and a few scalar hyperparameters.
-
-## Core Target
-
-Teacher branch on the clean graph:
+The role signature defines nonlocal positive samples for a BGRL-style graph encoder:
 
 ```text
-z_v = f_bar(X, A)_v
-z_hat_v = normalize(stopgrad(z_v))
+S_i = normalize([role_stats_i || wl_hash_i || landmark_diffusion_i])
+P_i = top-k nodes under cosine(S_i, S_j)
+L_role_nce = - sum_j P_ij log softmax(q_i^T z_j / tau)
+L_role_anchor = 1 - cos(g(z_i), S_i)
+L = lambda_bgrl L_BGRL + lambda_role_nce L_role_nce + lambda_role_anchor L_role_anchor
 ```
 
-Visible context direction:
+The downstream representation is:
 
 ```text
-C_v = one-hop visible neighbors of v outside the target set
-q_v = normalize(mean_{u in C_v} normalize(stopgrad(z_u)))
+h_i = [z_i^graph || x_i^raw || gate_i * S_i^role]
 ```
 
-Context-projected residual:
+The gate is mandatory. Current evidence says `gate=1` is good for Chameleon and bad for Texas/Wisconsin.
 
-```text
-r_v = z_hat_v - q_v (q_v^T z_hat_v)
-rho_v = ||r_v||_2
-r_hat_v = normalize(r_v)
-```
+## Evidence
 
-Energy gate:
+| Evidence | Result | Interpretation |
+|---|---:|---|
+| Chameleon 10-split proxy, `graph_raw_role_wl_landmark` | 0.585965 | strong positive over graph_raw and DCA |
+| Chameleon 10-split proxy, `graph_raw` | 0.496711 | baseline |
+| Chameleon 10-split DCA best | 0.505044 | previous best lead |
+| Chameleon RSP train split-0, role-fused | 0.596491 | training prototype preserves signal |
+| Texas 10-split full role proxy | 0.678378 vs raw 0.829730 | role branch hurts |
+| Wisconsin 10-split full role proxy | 0.719608 vs raw 0.839216 | role branch hurts |
 
-```text
-w_v = stopgrad(clip((rho_v - tau) / (1 - tau), 0, 1))
-```
+## Novelty Boundary
 
-Auxiliary mixed target:
+Close works include ASPECT, PROPGCL, H3GNNs/HarmonyGNNs, Str-GCL, CoRep, HLCL, and Less is More. RSP-GCL should not claim broad firstness. Its defensible claim is:
 
-```text
-lambda_t = lambda_max * min(1, epoch / warmup_epochs)
-y_v = normalize(z_hat_v + lambda_t * w_v * r_hat_v)
-```
+> A compact role/WL/landmark signature can define nonlocal role-equivalent positives for graph contrastive learning, producing a large gain on role-structured heterophily when gated away on raw-dominant graphs.
 
-Default pilot constants:
+## Decision
 
-```text
-lambda_max = 0.1
-tau = 0.15
-warmup_epochs = 0.1 * total_epochs
-epsilon = 1e-6
-mask_ratio = 0.2
-```
-
-## Online Isolation
-
-SRLP-Aux keeps the same hard-isolated online branch:
-
-```text
-X_online[v] = 0, for v in T
-A_online[i, j] = 0, if i in T or j in T
-A_online keeps only non-target self-loops after explicit self-loop handling
-H_ctx = f_theta(X_online, A_online)
-c_v = normalize(mean_{u in C_v} normalize(H_ctx[u]))
-p_v = normalize(g_theta(c_v))
-```
-
-NoIso remains only a leakage control, not a main method.
-
-## Loss
-
-The implemented minimal version uses a single predictor and mixed target:
-
-```text
-L = mean_{v in T_valid} [1 - cosine(p_v, y_v)]
-```
-
-where:
-
-```text
-T_valid = {v in T | |C_v| > 0 and rho_v > epsilon}
-```
-
-No variance guard is used by default. If `|T_valid| = 0`, skip the optimizer step and log it; if repeated, reduce `mask_ratio` before adding any module.
-
-## Why Not Two Heads
-
-The reviewer-suggested dual-head version,
-
-```text
-L = L_full + lambda * w_v * L_res
-```
-
-is a valid backup, but the current implementation intentionally starts with a single mixed target. This avoids adding trainable heads and tests the cleanest possible claim: whether a residual-biased target alone improves FullLatent-style prediction.
-
-## Claim-Driven Validation
-
-### Claim 1: Residual-only should be downgraded
-
-- Evidence: M2 split-0 residual-only SRLP has 0/5 clear wins over the strongest target-family ablation.
-- Interpretation: pure residual prediction is too lossy or too hard to be the main objective.
-
-### Claim 2: SRLP-Aux is a viable minimal revision
-
-- Minimal gate: Chameleon 1000, Texas 1000, Wisconsin 1000, Actor 1000, CiteSeer 200.
-- Go standard: at least 4/5 runs improve over old SRLP hard; at least 2/4 heterophily runs match or beat the strongest target-family ablation; no run falls more than 1.5 percentage points below FullLatent-Iso.
-- Current gate status: passed. SRLP-Aux improved over SRLP hard on all 5 runs and matched/exceeded the strongest target-family ablation on Chameleon and Texas.
-
-### Claim 3: Hard isolation remains a diagnostic, not a standalone success claim
-
-- Evidence: hard isolation lowered probe cosine on Chameleon, but residual-only accuracy did not improve consistently.
-- Interpretation: leakage reduction is necessary evidence, but not sufficient for a paper claim unless the revised target also improves downstream representations.
-
-## Current Go / Kill Rule
-
-Proceed to limited internal expansion only if SRLP-Aux remains stable:
-
-- run 10 official Geom-GCN splits for Chameleon/Texas/Wisconsin/Actor against FullLatent-Iso and ZPZ-Iso;
-- keep BGRL and external strong baselines paused until target-family evidence is stable;
-- kill or demote again if SRLP-Aux loses mean performance to FullLatent/ZPZ on most 10-split datasets.
-
-## Current Implementation
-
-- `baselines/BGRL/bgrl/srlp_utils.py`: `target_mode="srlp_aux"` target construction.
-- `baselines/BGRL/train_srlp_transductive.py`: CLI flags `--residual_mix_weight`, `--residual_energy_tau`, `--residual_mix_warmup_ratio`.
-- `baselines/BGRL/reproduce_srlp.py`: sequential runner variant `srlp_aux`.
-
-## Scope Boundary
-
-SRLP-Aux is no longer framed as “residual prediction replaces full latent prediction.” The defensible current claim is narrower:
-
-> A small energy-gated residual bias can improve target-isolated latent prediction, while residual-only prediction is too brittle.
+The promotion gate failed. Restart idea discovery with a different mechanism
+family. Future candidates should avoid generic node-equivalence/WL-positive
+claims and avoid relying only on concatenated handcrafted structural signatures.

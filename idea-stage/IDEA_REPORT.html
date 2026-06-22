@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SRLP-GCL Idea Report</title>
+<title>RSP-GCL Gate Report</title>
 
 <meta name="generator" content="ARIS render-html (academic, v1)">
 <meta name="aris:source-path" content="idea-stage\IDEA_REPORT.md">
-<meta name="aris:source-sha256" content="8ca4edbf7f182c6e74b27e2044d0895b5b6e055c1c76069cad4aed8b962dc019">
-<meta name="aris:generated-at" content="2026-06-21 10:59 UTC">
+<meta name="aris:source-sha256" content="43c9fa8cd6744d4b2e2fa439aaa2ff1c914d0228b72f2685ac4f096d8b405f22">
+<meta name="aris:generated-at" content="2026-06-22 00:52 UTC">
 
 <!-- MathJax 3 -->
 <script>
@@ -323,114 +323,67 @@ footer.aris-footer a { color: var(--ink-muted); border-bottom: 1px dotted var(--
 <nav class="toc">
   <h3>Contents</h3>
   <ol>
-<li><a href="#执行摘要">执行摘要</a>
+<li><a href="#2026-06-22-m2-m4-update">2026-06-22 M2-M4 Update</a>
 </li>
-<li><a href="#文献景观">文献景观</a>
+<li><a href="#executive-summary">Executive Summary</a>
 </li>
-<li><a href="#推荐方法srlp-gcl">推荐方法：SRLP-GCL</a>
+<li><a href="#literature-boundary">Literature Boundary</a>
+</li>
+<li><a href="#ranked-current-ideas">Ranked Current Ideas</a>
+</li>
+<li><a href="#key-results">Key Results</a>
 <ul>
-<li><a href="#问题锚点">问题锚点</a></li>
-<li><a href="#方法步骤">方法步骤</a></li>
-<li><a href="#为什么它可能新">为什么它可能新</a></li>
+<li><a href="#role-signature-proxy">Role-Signature Proxy</a></li>
+<li><a href="#rsp-gcl-training-prototype">RSP-GCL Training Prototype</a></li>
 </ul>
 </li>
-<li><a href="#新颖性判断">新颖性判断</a>
-</li>
-<li><a href="#最小公平-pilot">最小公平 pilot</a>
-<ul>
-<li><a href="#pilot-0任务是否非平凡">Pilot 0：任务是否非平凡</a></li>
-<li><a href="#pilot-1异配图小表">Pilot 1：异配图小表</a></li>
-<li><a href="#pilot-2正式-gono-go">Pilot 2：正式 go/no-go</a></li>
-</ul>
-</li>
-<li><a href="#推荐实现落点">推荐实现落点</a>
-</li>
-<li><a href="#排名结果">排名结果</a>
-<ul>
-<li><a href="#1-srlp-gcl---active">1. SRLP-GCL - ACTIVE</a></li>
-<li><a href="#2-ot-软目标预测---speculative">2. OT 软目标预测 - SPECULATIVE</a></li>
-<li><a href="#3-环境不变预测目标---speculative">3. 环境不变预测目标 - SPECULATIVE</a></li>
-<li><a href="#4-llm-语义目标预测---needssetting">4. LLM 语义目标预测 - NEEDS_SETTING</a></li>
-</ul>
-</li>
-<li><a href="#淘汰或暂缓方向">淘汰或暂缓方向</a>
-</li>
-<li><a href="#下一步">下一步</a>
-</li>
-<li><a href="#主要来源">主要来源</a>
+<li><a href="#next-step">Next Step</a>
 </li>
 </ol>
 </nav>
 
 <main>
 <header class="hero">
-
-  <h1>SRLP-GCL Idea Report</h1>
-
-
+  
+  <h1>RSP-GCL Gate Report</h1>
+  
+  
   <div class="meta">
     <span><strong>Source:</strong> <code>idea-stage\IDEA_REPORT.md</code></span>
-    <span><strong>SHA256:</strong> <code>8ca4edbf7f18</code></span>
-    <span><strong>Rendered:</strong> 2026-06-21 10:59 UTC</span>
-
+    <span><strong>SHA256:</strong> <code>43c9fa8cd674</code></span>
+    <span><strong>Rendered:</strong> 2026-06-22 00:52 UTC</span>
+    
   </div>
 </header>
 
-<h1 id="idea-discovery-report-srlp-gcl">Idea Discovery Report: SRLP-GCL</h1>
-<p><strong>方向</strong>: 隐空间预测式图对比学习方法 <strong>日期</strong>: 2026-06-21 <strong>技能流程</strong>: <code>/idea-discovery</code> 轻量运行，包含本地上下文读取、近期文献检索、候选池生成、纸面查新和方法收敛。 <strong>验证状态</strong>: 未运行 GPU pilot；未调用二级审稿代理；当前结论是 <code>ACTIVE / ready for pilot</code>。</p>
-<h2 id="执行摘要">执行摘要</h2>
-<p>推荐方法是 <strong>SRLP-GCL: Shortcut-Resistant Residual Latent Prediction for Graph Contrastive Learning</strong>，中文名为“反捷径残差隐目标预测式图对比学习”。</p>
-<p>一句话方法：先用教师编码器在干净图上生成目标节点隐表示，再减去邻域消息传递已经能轻易得到的平滑部分；在线编码器只能看遮蔽后的上下文图，并通过预测这个“残差隐目标”来学习节点表示，同时在残差目标空间做条件对比。</p>
-<p>这个方向比普通“Graph-JEPA 搬到节点分类”更有论文机会，因为它直接回应近期发现：普通 GCL 的正样本对齐可能会被消息传递机制平凡化。SRLP-GCL 把正目标改造成消息传递不容易偷懒得到的残差信号，主贡献集中、第一版也能放进现有 <code>baselines/</code> 框架做小 pilot。</p>
-<h2 id="文献景观">文献景观</h2>
-<table><thead><tr><th>工作</th><th>时间/来源</th><th>与本方向的关系</th><th>对 SRLP-GCL 的约束</th></tr></thead><tbody><tr><td>Graph-JEPA: Graph-level Representation Learning with Joint-Embedding Predictive Architectures</td><td>TMLR / arXiv:2309.16014，2025 最终版，https://arxiv.org/abs/2309.16014</td><td>在图级任务中用上下文子图预测目标子图隐表示。</td><td>不能只说“图上做 JEPA”；必须转向节点级、异配图、残差目标和对比式目标。</td></tr><tr><td>GraphMAE2</td><td>WWW 2023 / arXiv:2304.04779，https://arxiv.org/abs/2304.04779</td><td>已经把 masked graph autoencoder 扩展到 embedding-space latent prediction。</td><td>不能做普通遮蔽特征重建或全隐表示预测。</td></tr><tr><td>BGRL</td><td>ICLR 2022 / arXiv:2102.06514，https://arxiv.org/abs/2102.06514</td><td>用在线编码器预测目标编码器的增强视图，负样本免费。</td><td>EMA 结构可以复用，但不能继续同节点增强视图预测。</td></tr><tr><td>JPEB-GSSL / Predict, Cluster, Refine</td><td>arXiv:2502.01684，https://arxiv.org/abs/2502.01684</td><td>非对比 joint embedding predictive graph SSL，包含 context-to-multiple-target 和 GMM 伪语义。</td><td>SRLP-GCL 必须强调“残差目标 + 条件对比 + 异配节点分类”，而不是泛化 JEPA。</td></tr><tr><td>ASPECT</td><td>arXiv:2604.01878，2026-04/05，https://arxiv.org/abs/2604.01878</td><td>节点级自适应谱融合 GCL，直接压住 NFR-GCL 旧方向。</td><td>不再主打节点频率路由；ASPECT 是必比/必引用近邻。</td></tr><tr><td>Revisiting Positive Samples in GCL / SPGCL</td><td>arXiv:2606.10284，2026-06，https://arxiv.org/abs/2606.10284</td><td>指出消息传递可能让正样本最大化平凡化，并用 Dirichlet energy 分析正样本信号。</td><td>SRLP-GCL 的核心机会：设计不会被消息传递提前完成的正目标。</td></tr><tr><td>GCL-OT</td><td>arXiv:2511.16778，https://arxiv.org/html/2511.16778v2</td><td>对异配文本属性图做结构-文本的 OT 软对齐。</td><td>OT 软目标可以当备选，但文本属性图方向已有近邻，不适合作为首选主线。</td></tr></tbody></table>
-<h2 id="推荐方法srlp-gcl">推荐方法：SRLP-GCL</h2>
-<h3 id="问题锚点">问题锚点</h3>
-<ul><li><strong>底层问题</strong>: 现有 GCL 在节点分类里常依赖同节点增强视图对齐，但在异配图和混合同配/异配结构中，普通正样本对齐可能不是有效学习信号。</li><li><strong>必须解决的瓶颈</strong>: 正目标不能被简单邻域平滑或同节点增强捷径提前完成；否则模型学到的是消息传递本来就会产生的低信息量一致性。</li><li><strong>非目标</strong>: 不做节点级频率路由主线，不引入 LLM 文本教师，不开新大模型栈。</li><li><strong>成功条件</strong>: 在异配图官方固定划分上超过强本地基线，并且 ablation 证明“残差目标”比全隐表示目标、普通 BGRL/GRACE 对齐更有用。</li></ul>
-<h3 id="方法步骤">方法步骤</h3>
-<ol><li><p><strong>教师目标构造</strong>  用 EMA 教师编码器 <code>f_bar</code> 在干净图上得到节点隐表示 <code>z_bar</code>。计算邻域平滑部分 <code>s_bar = A_norm z_bar</code>，然后构造目标残差：</p>
-<p> ``<code>text  r_bar(v) = normalize(z_bar(v) - stopgrad(s_bar(v)))  </code>``</p>
-<p> 直觉是：<code>s_bar(v)</code> 代表消息传递容易带来的低难度一致性；<code>r_bar(v)</code> 保留目标节点不容易由邻居平滑直接恢复的信息。</p></li><li><strong>上下文遮蔽</strong>  采样目标节点集合 <code>T</code>，遮蔽它们的输入特征，并可随机断开一部分目标节点入边，防止在线编码器直接偷看目标。在线编码器 <code>f</code> 只在遮蔽图上编码上下文。</li><li><p><strong>残差预测头</strong>  对每个目标节点 <code>v</code>，从其可见边界节点、结构统计和遮蔽后的自身 token 得到上下文向量 <code>c(v)</code>，用小 MLP 预测残差目标：</p>
-<p> ``<code>text  p(v) = g(c(v))  L_pred = 1 - cosine(p(v), stopgrad(r_bar(v)))  </code>``</p></li><li><p><strong>条件残差 InfoNCE</strong>  在同一 batch 或 memory bank 中选负样本，但负样本不随机选，而是从相近度数、相近局部同配率、相近残差范数的节点中取。这让任务不能靠“度数/难度/平滑性”走捷径：</p>
-<p> ``<code>text  L_ctr = -log exp(sim(p(v), r_bar(v))/tau)          / sum_{u in C(v)} exp(sim(p(v), r_bar(u))/tau)  </code>``</p></li><li><strong>训练与推理</strong>  总损失为 <code>L = L_pred + lambda * L_ctr + beta * L_varcov</code>。<code>L_varcov</code> 可复用 VICReg/Barlow 类 collapse 防护，只做稳定器，不作为论文主贡献。推理时丢掉预测头，使用编码器表示做线性评估。</li></ol>
-<h3 id="为什么它可能新">为什么它可能新</h3>
-<p>SRLP-GCL 的增量不是“预测隐表示”本身，而是 <strong>为图消息传递设计预测目标</strong>。它把近期 SPGCL 暴露的问题转成方法机制：既然普通正样本会被消息传递平凡化，那就从教师目标里扣掉平滑部分，只预测剩余的残差信息。</p>
-<p>这和几个近邻的差别如下：</p>
-<ul><li>相对 Graph-JEPA：Graph-JEPA 是图级上下文-目标子图隐表示预测；SRLP-GCL 是节点级、异配图优先，并引入残差化目标和条件对比。</li><li>相对 GraphMAE2：GraphMAE2 用 latent prediction 正则化特征重建；SRLP-GCL 不重建输入，也不预测全隐表示，而预测消息传递不容易得到的残差目标。</li><li>相对 BGRL：BGRL 预测同节点增强视图；SRLP-GCL 预测遮蔽目标节点的残差隐表示，正目标不等于同节点增强。</li><li>相对 ASPECT：ASPECT 学节点级谱融合策略；SRLP-GCL 不做低/高频路由，而改造自监督目标。</li><li>相对 SPGCL：SPGCL 从能量角度恢复正样本有效性；SRLP-GCL 直接把正样本目标改成去平滑残差，可作为互补路线。</li></ul>
-<h2 id="新颖性判断">新颖性判断</h2>
-<p><strong>总体评分</strong>: 7.2/10，建议 <code>PROCEED WITH CAUTION</code>。</p>
-<table><thead><tr><th>核心主张</th><th>新颖性</th><th>最近风险</th><th>规避方式</th></tr></thead><tbody><tr><td>残差隐目标预测能避免消息传递正样本平凡化</td><td>中高</td><td>SPGCL 已讨论 Dirichlet energy 和正样本有效性</td><td>不声称首次发现问题；主张“目标残差化”是新的任务构造。</td></tr><tr><td>节点级上下文到目标残差预测适合异配图</td><td>中高</td><td>Graph-JEPA/JPEB-GSSL 已有图 JEPA 框架</td><td>明确节点分类、异配图、官方固定划分和局部兼容性采样。</td></tr><tr><td>条件负样本来自同难度/同结构层级</td><td>中</td><td>hard negative GCL 已拥挤</td><td>作为配套机制，不当主贡献；重点证明残差目标本身。</td></tr><tr><td>可低成本嵌入现有 GCL baselines</td><td>高</td><td>工程优势不是理论新颖性</td><td>作为可复现实验优势，不作为论文标题贡献。</td></tr></tbody></table>
-<h2 id="最小公平-pilot">最小公平 pilot</h2>
-<h3 id="pilot-0任务是否非平凡">Pilot 0：任务是否非平凡</h3>
-<ul><li>数据集：Cora、Chameleon，各 1 个 seed/split。</li><li>对比：普通全隐表示目标预测、普通 BGRL/GRACE 目标、SRLP 残差目标。</li><li>成功信号：残差目标训练不 collapse；linear eval 不低于普通目标；残差目标的正负相似度分布有可分性。</li></ul>
-<h3 id="pilot-1异配图小表">Pilot 1：异配图小表</h3>
-<ul><li>数据集：Actor、Chameleon、Squirrel 的 Geom-GCN 官方 split 0。</li><li>对比：GRACE、GCA、BGRL、PolyGCL、GRASS、EDA-GCL 的本地对应结果。</li><li>成功信号：至少 2/3 数据集单 split 超过 GRACE/GCA/BGRL，且接近或超过 PolyGCL/GRASS/EDA-GCL 中的一个强基线。</li></ul>
-<h3 id="pilot-2正式-gono-go">Pilot 2：正式 go/no-go</h3>
-<ul><li>数据集：Actor、Chameleon、Squirrel、Cornell、Texas、Wisconsin，官方 10 固定划分。</li><li>主指标：Accuracy / F1Mi，报告 mean +/- std。</li><li>Go 条件：平均比当前最好本地基线提升至少 1.0-1.5 点，或在 Chameleon/Squirrel/小 WebKB 中出现清晰互补优势。</li><li>Kill 条件：残差目标 ablation 不如全隐目标，且没有任何异配图稳定提升。</li></ul>
-<h2 id="推荐实现落点">推荐实现落点</h2>
-<p>第一版不要新开大框架。建议在 <code>baselines/</code> 里选一个 PyTorch GCL 基线做窄改：</p>
-<ol><li>复用 GCN 编码器和线性评估流程。</li><li>增加 EMA teacher、target masking、residual target bank、predictor head。</li><li>首轮只支持 Cora、Chameleon、Actor 三个数据集。</li><li>遵守 <code>baselines/reproduction_protocol.md</code>：异配图必须使用 <code>baselines/dataset_splits/heterophily/geom-gcn/</code> 官方 split。</li></ol>
-<h2 id="排名结果">排名结果</h2>
-<h3 id="1-srlp-gcl---active">1. SRLP-GCL - ACTIVE</h3>
-<ul><li><strong>方法</strong>: 预测去邻域平滑后的目标节点残差隐表示，并在条件残差目标空间做对比。</li><li><strong>公平测试状态</strong>: 尚未测试；可以 &lt;=1 天做 pilot。</li><li><strong>论文潜力</strong>: 中高。</li><li><strong>主要风险</strong>: reviewer 可能认为残差只是高频信号，和 ASPECT/SPGCL 太近。</li><li><strong>应对</strong>: 不写成频率路由；把贡献放在“预测目标构造”和“消息传递捷径消除”。</li></ul>
-<h3 id="2-ot-软目标预测---speculative">2. OT 软目标预测 - SPECULATIVE</h3>
-<ul><li><strong>方法</strong>: 多个上下文节点对多个目标节点做软分配，再预测加权目标隐表示。</li><li><strong>风险</strong>: GCL-OT 已经在异配文本属性图上很近。</li><li><strong>下一步</strong>: 只有当 SRLP-GCL pilot 较弱时，才考虑作为软正样本模块。</li></ul>
-<h3 id="3-环境不变预测目标---speculative">3. 环境不变预测目标 - SPECULATIVE</h3>
-<ul><li><strong>方法</strong>: 在不同局部同配率/度数/扰动环境中预测同一目标残差的稳定部分。</li><li><strong>风险</strong>: 可能变成两个贡献叠加，首轮不要加入。</li></ul>
-<h3 id="4-llm-语义目标预测---needssetting">4. LLM 语义目标预测 - NEEDS_SETTING</h3>
-<ul><li><strong>方法</strong>: 用文本或 LLM 表示构造目标隐表示。</li><li><strong>风险</strong>: 当前基线没有统一原始文本输入；成本和近邻工作都偏高。</li></ul>
-<h2 id="淘汰或暂缓方向">淘汰或暂缓方向</h2>
-<table><thead><tr><th>方向</th><th>状态</th><th>原因</th></tr></thead><tbody><tr><td>NFR-GCL / 节点级频率路由</td><td>KILLED</td><td>ASPECT 已经直接覆盖节点级自适应谱融合 GCL。</td></tr><tr><td>普通 Graph-JEPA 节点版</td><td>KILLED</td><td>Graph-JEPA/JPEB-GSSL/GraphMAE2 近邻太多。</td></tr><tr><td>纯 GraphMAE2 式 latent prediction</td><td>KILLED</td><td>缺少清晰新机制。</td></tr><tr><td>BGRL + 更复杂增强</td><td>DEPRIORITIZED</td><td>仍然依赖增强视图对齐，无法回应正样本平凡化。</td></tr></tbody></table>
-<h2 id="下一步">下一步</h2>
-<ol><li>在 <code>baselines/</code> 里做 SRLP-GCL 单 split pilot，优先 Chameleon + Cora。</li><li>如果 pilot 有正信号，再跑 Actor/Chameleon/Squirrel 三个异配图 split 0。</li><li>只有通过 Pilot 1 后，才写 <code>refine-logs/FINAL_PROPOSAL.md</code> 和完整 <code>EXPERIMENT_PLAN.md</code>，避免又像 NFR-GCL 一样先规划后发现新颖性风险。</li></ol>
-<h2 id="主要来源">主要来源</h2>
-<ul><li>Graph-JEPA: https://arxiv.org/abs/2309.16014</li><li>GraphMAE2: https://arxiv.org/abs/2304.04779</li><li>BGRL: https://arxiv.org/abs/2102.06514</li><li>JPEB-GSSL / Predict, Cluster, Refine: https://arxiv.org/abs/2502.01684</li><li>ASPECT: https://arxiv.org/abs/2604.01878</li><li>Revisiting Positive Samples in Graph Contrastive Learning: https://arxiv.org/abs/2606.10284</li><li>GCL-OT: https://arxiv.org/html/2511.16778v2</li></ul>
+<h1 id="idea-discovery-report-role-signature-positive-gcl">Idea Discovery Report: Role-Signature Positive GCL</h1>
+<p><strong>Date</strong>: 2026-06-22 <strong>Current status</strong>: <code>DIAGNOSTIC_ONLY_AFTER_GATE</code> <strong>Latest decision</strong>: RSP-GCL has been downgraded after M2-M4; DCA/VST/CIG/CLEAR remain stopped and no method is currently ready to refine.</p>
+<h2 id="2026-06-22-m2-m4-update">2026-06-22 M2-M4 Update</h2>
+<p>RSP-GCL passed a narrow Chameleon gate but failed as a broad paper-level route. Chameleon 10-split RSP training gives <code>role_fused_test@best = 0.573684 +/- 0.026265</code>, and validation selection chooses <code>graph_raw_role</code> in 10/10 splits with <code>0.574781 +/- 0.023321</code>. Texas/Wisconsin remain raw-dominant: raw <code>0.829730</code> / <code>0.839216</code> beats role-fused <code>0.727027</code> / <code>0.774510</code>, and validation-selected fallback reaches only <code>0.827027</code> / <code>0.827451</code>.</p>
+<p>Novelty check also weakens the route: GALE covers node equivalence in graph SSL, WLGCL directly uses WL structural similarity for GCL positives, and SPGCL shows positive-sample GCL is crowded in 2026. RSP should be kept as a diagnostic baseline, not a main method. Full report: <code>refine-logs/RSP_M2_M4_RESULTS_20260622.md</code>.</p>
+<h2 id="executive-summary">Executive Summary</h2>
+<p>重新宽搜索后，当前最强新方向是 <strong>RSP-GCL</strong>（Role-Signature Positive Graph Contrastive Learning）。它用无标签结构角色签名构造非局部正样本：local role statistics、WL-hash neighborhood signature、landmark diffusion signature。这个机制避开了前面失败或低新颖性的谱融合、固定滤波器、语义 kNN、原型、残差预测、local transport 和 counterfactual edge mask 路线。</p>
+<p>最强证据来自 Chameleon：在已有 RFA/BGRL 1000-epoch checkpoints 上做 zero-training proxy，<code>graph_raw_role_wl_landmark</code> 的 10-split mean test 为 <code>0.585965</code>，明显高于 <code>graph_raw=0.496711</code> 和此前 DCA 最好 <code>0.505044</code>。训练版 RSP-GCL split-0 也稳定，Chameleon <code>role_fused_test@best=0.596491</code>，无 NaN/collapse。</p>
+<p>限制也很明确：Texas/Wisconsin 是 raw-feature-dominant，role branch 会负迁移。RSP-GCL 不能直接扩成“所有异配图无条件提升”的主张，必须加入验证集选择或 label-free role gate。</p>
+<h2 id="literature-boundary">Literature Boundary</h2>
+<p>近邻工作已经覆盖常规路线：</p>
+<ul><li>ASPECT: node-wise spectral gating and adaptive spectral contrast.</li><li>PROPGCL: propagation-only GCL and learnable propagation as a strong simple baseline.</li><li>H3GNNs / HarmonyGNNs: joint structural node encoding with SSL.</li><li>Str-GCL: structural commonsense rules in GCL.</li><li>CoRep: coloring learning and multi-hop same-color positives for heterophily.</li><li>HLCL: heterophily graph filters.</li><li>Less is More: graph/feature complementary GCL.</li></ul>
+<p>RSP-GCL 的可辩护差异点不是“结构 GCL 首创”，而是更窄的：基于 role/WL/landmark signature 的非局部 role-equivalent positives，并且对 raw-dominant 图门控关闭。</p>
+<h2 id="ranked-current-ideas">Ranked Current Ideas</h2>
+<table><thead><tr><th style="text-align:right">Rank</th><th>Candidate</th><th>Evidence</th><th>Status</th></tr></thead><tbody><tr><td style="text-align:right">1</td><td>RSP-GCL</td><td>Chameleon 10-split proxy <code>0.585965</code>, training split-0 <code>0.596491</code></td><td>ACTIVE_WITH_SCOPE_LIMIT</td></tr><tr><td style="text-align:right">2</td><td>Validation-gated RSP</td><td>Texas/Wisconsin need role-off protection; val-selected proxy preserves raw roughly</td><td>ACTIVE_NEXT</td></tr><tr><td style="text-align:right">3</td><td>Label-free role reliability gate</td><td>avoids validation-tuned representation choice</td><td>SPECULATIVE</td></tr><tr><td style="text-align:right">4</td><td>WL-only / landmark-only RSP ablations</td><td>WL component is strong on Chameleon</td><td>BACKUP</td></tr><tr><td style="text-align:right">5</td><td>Training-dynamics curriculum GCL</td><td>different mechanism family, not yet tested</td><td>SPECULATIVE</td></tr><tr><td style="text-align:right">6</td><td>Role-conditioned invariance GCL</td><td>may strengthen RSP objective</td><td>BACKUP</td></tr><tr><td style="text-align:right">7</td><td>DCA/AnchorBank</td><td>local positive but novelty score only about 3/10</td><td>DIAGNOSTIC_ONLY</td></tr><tr><td style="text-align:right">8</td><td>VST-GCL / CIG-CLEAR / SBN / SRLP / DCGCL / FTDR / CFR / ORFA / FBA</td><td>implemented or diagnosed and failed as main methods</td><td>STOP</td></tr></tbody></table>
+<h2 id="key-results">Key Results</h2>
+<h3 id="role-signature-proxy">Role-Signature Proxy</h3>
+<table><thead><tr><th>Dataset</th><th style="text-align:right">Best role result</th><th style="text-align:right">Control</th><th>Decision</th></tr></thead><tbody><tr><td>Chameleon 10-split</td><td style="text-align:right"><code>graph_raw_role_wl_landmark</code> 0.585965</td><td style="text-align:right"><code>graph_raw</code> 0.496711, DCA 0.505044</td><td>strong positive</td></tr><tr><td>Texas 10-split</td><td style="text-align:right">full role 0.678378</td><td style="text-align:right">raw 0.829730</td><td>gate required</td></tr><tr><td>Wisconsin 10-split</td><td style="text-align:right">full role 0.719608</td><td style="text-align:right">raw 0.839216</td><td>gate required</td></tr></tbody></table>
+<h3 id="rsp-gcl-training-prototype">RSP-GCL Training Prototype</h3>
+<table><thead><tr><th>Dataset</th><th style="text-align:right">Graph</th><th style="text-align:right">Graph+Raw</th><th style="text-align:right">Graph+Raw+Role</th><th style="text-align:right">Raw</th><th>Verdict</th></tr></thead><tbody><tr><td>Chameleon split 0</td><td style="text-align:right">0.429825</td><td style="text-align:right">0.478070</td><td style="text-align:right">0.596491</td><td style="text-align:right">0.440789</td><td>positive</td></tr><tr><td>Texas split 0</td><td style="text-align:right">0.648649</td><td style="text-align:right">0.783784</td><td style="text-align:right">0.702703</td><td style="text-align:right">0.810811</td><td>gate required</td></tr><tr><td>Wisconsin split 0</td><td style="text-align:right">0.568627</td><td style="text-align:right">0.803922</td><td style="text-align:right">0.725490</td><td style="text-align:right">0.823529</td><td>gate required</td></tr></tbody></table>
+<h2 id="next-step">Next Step</h2>
+<p>Restart idea discovery with a different mechanism family. Keep RSP role signatures as a Chameleon diagnostic baseline, but do not expand RSP to external baselines or large graphs.</p>
 
 <footer class="aris-footer">
   Generated by <a href="https://github.com/wanshuiyin/Auto-claude-code-research-in-sleep/blob/main/skills/render-html/SKILL.md">ARIS <code>/render-html</code></a> ·
   source path <code>idea-stage\IDEA_REPORT.md</code> ·
-  SHA256 <code>8ca4edbf7f18</code> ·
-  generated at 2026-06-21 10:59 UTC.
+  SHA256 <code>43c9fa8cd674</code> ·
+  generated at 2026-06-22 00:52 UTC.
   This is a generated view — edit the source Markdown, then re-render.
 </footer>
 </main>

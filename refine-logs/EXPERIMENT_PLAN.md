@@ -1,105 +1,96 @@
-# Experiment Plan: SRLP 4060 Small-Graph Pilot
+# Experiment Plan: RSP-GCL Gate
 
-**Problem**: 图自监督正目标容易被普通消息传递捷径平凡化，尤其在异配图节点分类上难以提供新信号。
-**Method Thesis**: SRLP 预测目标节点教师隐表示中无法由可见上下文子空间直接解释的残差成分。
-**Date**: 2026-06-21
-**Hardware default**: NVIDIA GeForce RTX 4060 Laptop GPU, about 8GB VRAM.
+**Date**: 2026-06-22  
+**Candidate**: RSP-GCL  
+**Status**: `COMPLETED_DOWNGRADED`
 
-## Claim Map
+## Goal
 
-| Claim | Why It Matters | Minimum Convincing Evidence | Linked Blocks |
-|---|---|---|---|
-| C1: SRLP target is not just full-latent prediction or simple high-frequency residual. | 这是方法核心新意。 | SRLP beats or matches `FullLatent-Iso` and `ZPZ-Iso` on Chameleon split 0 without collapse. | B0, B1, B2 |
-| C2: hard target isolation reduces shortcut leakage. | 证明 incident-edge removal 不是任意复杂化。 | SRLP hard isolation has lower leakage-probe cosine/MSE signal than `SRLP-NoIso`. | B1, B4 |
+Determine whether RSP-GCL can become a real graph contrastive learning method rather than a Chameleon-only structural feature observation.
 
-## Paper Storyline
+## Completed Gates
 
-- Main paper must prove: context-projected residual target and hard target isolation are both useful.
-- Appendix can support: small heterophily 10-split internal ablations.
-- Experiments intentionally cut for now: PubMed, Amazon, Coauthor, Wiki-CS, Squirrel, and full external main table.
+| Run ID | Gate | Result | Decision |
+|---|---|---:|---|
+| R039 | role-signature proxy split-0 | Chameleon full role `0.596491`; Texas/Wisconsin below raw | partial pass |
+| R040 | Chameleon 10-split proxy | full role `0.585965` vs graph_raw `0.496711` | pass |
+| R041 | RSP training split-0 | Chameleon role-fused `0.596491`; Texas/Wisconsin below raw | partial pass |
+| R042 | Chameleon 10-split RSP training | role-fused `0.573684 +/- 0.026265`; no NaN/collapse | pass with scope limit |
+| R043 | validation-selected representation gate | Chameleon `0.574781`; Texas/Wisconsin `0.827027` / `0.827451` below raw | partial fail |
+| R044 | direct novelty check | GALE/WLGCL/SPGCL overlap | fail |
 
-## Experiment Blocks
+## Final Decision
 
-### Block 0: 4060 Smoke Test
+RSP-GCL is downgraded to diagnostic-only. Do not run external baselines, large
+graphs, or paper-table expansion for this candidate.
 
-- Dataset / split / task: Cora fixed 1:1:8 split seed 0; Chameleon Geom-GCN split 0.
-- Compared systems: SRLP only.
-- Metrics: `metrics.json`, `results.csv`, NaN flag, collapse flag, `skipped_ratio`, split path and train/val/test counts.
-- Success criterion: no OOM, no NaN, no collapse, `skipped_ratio < 0.4`.
-- Priority: MUST-RUN.
+Next plan: restart idea discovery with a different mechanism family and keep
+RSP role signatures as a diagnostic baseline.
 
-### Block 1: Small-Graph Mechanism Pilot
+## Next Required Runs
 
-- Dataset / split / task: Cora, CiteSeer, Chameleon split 0.
-- Compared systems: BGRL, `FullLatent-Iso`, `ZPZ-Iso`, SRLP, `SRLP-NoIso`.
-- Metrics: `valid@best`, `test@best`, final test, prediction cosine, residual norm, skipped ratio, effective rank.
-- Setup details: 200 epochs first; extend positive cases to 1000 epochs only after curves are stable.
-- Success criterion: SRLP does not collapse and is not clearly worse than `FullLatent-Iso` / `ZPZ-Iso` on Chameleon.
-- Priority: MUST-RUN.
+No RSP runs are required. The historical plan below is retained for traceability.
 
-### Block 2: Small Heterophily Split-0 Expansion
+### R042: Chameleon 10-Split RSP Training
 
-- Dataset / split / task: Cornell, Texas, Wisconsin, Actor, Chameleon, all Geom-GCN split 0.
-- Compared systems: `FullLatent-Iso`, `ZPZ-Iso`, SRLP, `SRLP-NoIso`.
-- Success criterion: SRLP wins against the strongest target-family ablation on at least 3/5 datasets, or has a clear Chameleon/Actor positive signal with leakage-probe support.
-- Priority: MUST-RUN after Block 1 is positive.
+Purpose: verify that the training objective, not only the post-hoc role signature, works across official splits.
 
-### Block 3: Small-Graph 10-Split Internal Ablation
+Command template:
 
-- Dataset / split / task: Cornell, Texas, Wisconsin, Chameleon; Actor optional.
-- Compared systems: `FullLatent-Iso`, `ZPZ-Iso`, SRLP, `SRLP-NoIso`.
-- Table target: target-family internal ablation table, not the paper main table.
-- Priority: NICE-TO-HAVE until split-0 evidence is positive.
+```powershell
+python .\reproduce_dcgcl.py `
+  --datasets chameleon `
+  --variants rsp `
+  --splits 0,1,2,3,4,5,6,7,8,9 `
+  --epochs 200 `
+  --eval_epochs 50 `
+  --output_dir runs/rsp_m2_chameleon10_20260622 `
+  --clean
+```
 
-### Block 4: Leakage Probe
+Pass condition:
 
-- Probe definition: freeze online encoder, use target-node `h_online[v]` to linearly predict teacher target or residual target.
-- Metrics: probe cosine, probe MSE, optional node classification accuracy.
-- Success criterion: SRLP hard isolation has lower probe signal than `SRLP-NoIso`.
-- Priority: MUST-RUN for Chameleon once 200-epoch checkpoints exist.
+- role-fused mean clearly above `graph_raw=0.496711` and DCA `0.505044`;
+- no NaN/collapse;
+- graph-only branch does not collapse to rank < 2.
 
-## Protocol Details
+### R043: Role Gate for Raw-Dominant Graphs
 
-- Cora/CiteSeer use fixed 1:1:8 random split with `split_seed=0`; all variants share the same `.npz` file.
-- Heterophily datasets use only Geom-GCN official `.npz` splits from `baselines/dataset_splits/heterophily/geom-gcn/`.
-- Scripts must print the split path and train/val/test counts.
-- `ZPZ-Iso` uses sparse propagation for `P = D^{-1/2}(A+I)D^{-1/2}` and `R_zpz = Z_bar - PZ_bar`.
-- Context and `PZ` use undirected one-hop adjacency; this is required on Chameleon because the PyG edge index is strongly directed.
-- SRLP/BGRL pilot scripts use `GCN(add_self_loops=False)` and explicitly add self-loops. Clean teacher/eval graphs get all-node self-loops; hard-isolated online graphs get self-loops only for non-target nodes.
-- No dense `N x N` matrices are allowed.
+Purpose: avoid Texas/Wisconsin regressions.
 
-## Run Order and Milestones
+Minimal gate:
 
-| Milestone | Goal | Runs | Decision Gate | Cost | Risk |
-|---|---|---|---|---|---|
-| M0 | Smoke test | Cora + Chameleon SRLP, 5 epochs | JSON/CSV written, no OOM/NaN/collapse | < 1 GPU-hour | split or target bugs |
-| M1 | Mechanism pilot | Cora/CiteSeer/Chameleon 5 variants, 200 epochs | SRLP not worse than target ablations on Chameleon | low | short training may underfit |
-| M2 | Positive-case extension | Chameleon positive runs to 1000 epochs | best valid remains stable | low-medium | overfitting |
-| M3 | Small heterophily expansion | Cornell/Texas/Wisconsin/Actor/Chameleon split 0 | at least 3/5 positive | medium | tiny WebKB variance |
-| M4 | Internal 10-split ablation | small heterophily 10 splits | mean/std target-family evidence | medium | many small runs |
-| M5 | Leakage probe | hard vs NoIso checkpoints | hard probe signal lower | low | probe too easy |
+```text
+h_i(alpha) = [z_i || x_i || alpha S_i], alpha in {0, 1}
+select alpha on validation split
+```
 
-## Compute and Data Budget
+Pass condition:
 
-- First-stage budget: under 2 GPU-hours for M0 + Chameleon M1.
-- Large graphs deferred: PubMed, Amazon-Photo, Amazon-Computers, Coauthor-CS, Coauthor-Physics, Wiki-CS, Squirrel.
-- CPU threads must be capped: `OMP_NUM_THREADS=1`, `MKL_NUM_THREADS=1`, `OPENBLAS_NUM_THREADS=1`, `NUMEXPR_NUM_THREADS=1`, `TORCH_NUM_THREADS=1`.
+- Texas 10-split selected mean is not below raw by more than noise;
+- Wisconsin 10-split selected mean is not below raw by more than noise;
+- Chameleon still selects role on most splits and keeps the positive signal.
 
-## Failure Rules
+### R044: Direct Novelty Check
 
-- If `|T_valid| = 0`, skip optimizer step and log it.
-- If `|T_valid| = 0` repeats or `skipped_ratio > 0.4` repeats, lower `mask_ratio` from 0.2 to 0.15.
-- Do not add new modules to fix `T_valid`.
-- If SRLP is clearly worse than full-latent and `ZPZ` in Block 1, kill or demote SRLP.
-- If only `SRLP-NoIso` works, treat the method as relying on leakage and stop expansion.
+Search specifically for:
 
-## Final Checklist
+- WL-positive graph contrastive learning;
+- structural-role positive samples in GCL;
+- landmark diffusion / positional signatures as contrastive positive selectors;
+- Str-GCL, CoRep, H3GNNs/HarmonyGNNs, structural encoder overlap.
 
-- [x] Main implementation path defined.
-- [x] Smoke tests started on Cora and Chameleon.
-- [x] JSON/CSV output protocol implemented.
-- [x] CSV output includes split path/counts, epoch/mask/epsilon settings, nested commit, and outer project commit.
-- [x] Strict hard-isolation self-loop check passed.
-- [x] Leakage probe implemented.
-- [ ] Cora/CiteSeer/Chameleon full 200-epoch M1 completed.
-- [ ] Small heterophily split-0 expansion completed.
+Pass condition:
+
+- novelty is at least medium with a defensible delta;
+- closest prior work does not already combine role/WL/landmark positives with role-gated node classification.
+
+## Stop Conditions
+
+Stop RSP-GCL if:
+
+- Chameleon 10-split training mean falls back near DCA or graph_raw;
+- role gate cannot protect Texas/Wisconsin raw;
+- novelty collapses to a direct prior.
+
+Do not run external baselines or large graphs before R042-R044 pass.
