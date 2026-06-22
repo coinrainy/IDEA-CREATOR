@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Idea Discovery Status: TD-GCL Incubation</title>
+
+<meta name="generator" content="ARIS render-html (academic, v1)">
+<meta name="aris:source-path" content="idea-stage\IDEA_REPORT.md">
+<meta name="aris:source-sha256" content="0451825e0050ef8d71f3f8ab44de0238974ef2926162ae84b4f7bf8804541a9e">
+<meta name="aris:generated-at" content="2026-06-22 01:13 UTC">
+
+<!-- MathJax 3 -->
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']], processEscapes: true },
+  options: { skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+
+<!-- highlight.js -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/atom-one-light.min.css">
+<script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded', () => hljs.highlightAll());</script>
+
+
+<style>
+:root {
+  --bg: #fdfcf7;
+  --bg-soft: #f4f1ea;
+  --bg-code: #f8f5ec;
+  --ink: #1a1a1a;
+  --ink-soft: #4a4a4a;
+  --ink-muted: #6b6b6b;
+  --primary: #1a4a8c;
+  --primary-soft: #2d6cb8;
+  --accent: #b8390e;
+  --warn: #b45309;
+  --warn-bg: #fef3c7;
+  --info-bg: #dbeafe;
+  --good-bg: #d1fae5;
+  --good: #065f46;
+  --bad-bg: #fee2e2;
+  --bad: #991b1b;
+  --border: #d6d0c0;
+  --border-soft: #e8e3d5;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: "Source Serif Pro", "Source Serif 4", "Crimson Pro", "Georgia", "Songti SC", "STSong", serif;
+  line-height: 1.65;
+  color: var(--ink);
+  background: var(--bg);
+  margin: 0;
+  padding: 0;
+  font-size: 16px;
+}
+
+.layout {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 48px;
+  padding: 40px 32px;
+}
+
+nav.toc {
+  position: sticky;
+  top: 24px;
+  align-self: start;
+  font-size: 13px;
+  max-height: calc(100vh - 48px);
+  overflow-y: auto;
+  border-right: 1px solid var(--border-soft);
+  padding-right: 16px;
+}
+nav.toc h3 {
+  margin: 0 0 12px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-muted);
+  font-weight: 600;
+}
+nav.toc ol { list-style: none; padding: 0; margin: 0; counter-reset: toc; }
+nav.toc ol li { margin: 5px 0; counter-increment: toc; }
+nav.toc ol li::before { content: counter(toc) ". "; color: var(--ink-muted); margin-right: 4px; }
+nav.toc a {
+  color: var(--ink-soft);
+  text-decoration: none;
+  border-bottom: 1px dotted transparent;
+}
+nav.toc a:hover { color: var(--primary); border-bottom-color: var(--primary); }
+nav.toc ul { list-style: none; padding-left: 14px; margin: 3px 0; font-size: 12px; }
+nav.toc ul li::before { content: "→ "; color: var(--border); }
+
+main { min-width: 0; }
+
+header.hero {
+  border-bottom: 3px double var(--primary);
+  padding-bottom: 24px;
+  margin-bottom: 32px;
+}
+header.hero .eyebrow {
+  color: var(--accent);
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+header.hero h1 {
+  font-size: 32px;
+  line-height: 1.2;
+  margin: 0 0 12px;
+  color: var(--ink);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+header.hero .subtitle {
+  font-size: 16px;
+  color: var(--ink-soft);
+  margin: 0 0 8px;
+  font-style: italic;
+}
+header.hero .byline {
+  font-size: 14px;
+  color: var(--ink-soft);
+  margin: 0 0 20px;
+}
+header.hero .byline strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+header.hero .meta {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  font-size: 12px;
+  color: var(--ink-muted);
+  border-top: 1px solid var(--border-soft);
+  padding-top: 14px;
+}
+header.hero .meta span strong { color: var(--ink-soft); }
+header.hero .meta code {
+  font-family: "JetBrains Mono", "SF Mono", "Menlo", "Consolas", monospace;
+  font-size: 11px;
+  background: var(--bg-soft);
+  padding: 1px 5px;
+  border-radius: 3px;
+  border: 1px solid var(--border-soft);
+}
+
+h2 {
+  font-size: 24px;
+  margin: 44px 0 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+  color: var(--ink);
+  font-weight: 700;
+}
+h2 .num { color: var(--primary); font-weight: 600; margin-right: 8px; }
+h3 { font-size: 19px; margin: 28px 0 10px; color: var(--primary); font-weight: 600; }
+h4 { font-size: 16px; margin: 20px 0 8px; color: var(--ink); font-weight: 600; }
+
+p { margin: 10px 0; }
+ul, ol { padding-left: 22px; margin: 10px 0; }
+ul li, ol li { margin: 4px 0; }
+ul li::marker { color: var(--primary); }
+
+strong { color: var(--accent); font-weight: 600; }
+em { color: var(--ink-soft); }
+
+a { color: var(--primary); }
+a:hover { color: var(--accent); }
+
+code:not(.hljs) {
+  font-family: "JetBrains Mono", "SF Mono", "Menlo", "Consolas", monospace;
+  font-size: 0.86em;
+  background: var(--bg-code);
+  padding: 1px 5px;
+  border-radius: 3px;
+  border: 1px solid var(--border-soft);
+  color: var(--accent);
+}
+
+pre {
+  background: #fafaf6;
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--primary);
+  padding: 0;
+  overflow-x: auto;
+  border-radius: 4px;
+  margin: 14px 0;
+}
+pre code, pre code.hljs {
+  background: transparent !important;
+  display: block;
+  padding: 14px 18px !important;
+  font-size: 13px;
+  line-height: 1.55;
+  font-family: "JetBrains Mono", "SF Mono", "Menlo", monospace;
+  color: var(--ink);
+}
+pre.diagram {
+  background: #f9f6ed;
+  border-left: 4px solid var(--accent);
+  font-size: 12.5px;
+  line-height: 1.4;
+}
+
+.callout {
+  margin: 16px 0;
+  padding: 12px 16px;
+  border-radius: 4px;
+  border-left: 4px solid;
+  font-size: 15px;
+}
+.callout-title {
+  font-weight: 600;
+  margin-bottom: 6px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.callout-info { background: var(--info-bg); border-left-color: var(--primary); }
+.callout-info .callout-title { color: var(--primary); }
+.callout-warn { background: var(--warn-bg); border-left-color: var(--warn); }
+.callout-warn .callout-title { color: var(--warn); }
+.callout-good { background: var(--good-bg); border-left-color: var(--good); }
+.callout-good .callout-title { color: var(--good); }
+.callout-bad { background: var(--bad-bg); border-left-color: var(--bad); }
+.callout-bad .callout-title { color: var(--bad); }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+  font-size: 14px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+thead { background: var(--primary); color: white; }
+th, td {
+  text-align: left;
+  padding: 9px 12px;
+  border-bottom: 1px solid var(--border-soft);
+  vertical-align: top;
+}
+th { font-weight: 600; font-size: 13px; letter-spacing: 0.02em; }
+tr:last-child td { border-bottom: none; }
+tbody tr:nth-child(even) { background: var(--bg-soft); }
+
+details.qa, details {
+  background: white;
+  border: 1px solid var(--border-soft);
+  border-radius: 6px;
+  margin: 10px 0;
+  padding: 0;
+}
+details summary {
+  cursor: pointer;
+  padding: 10px 14px;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--primary);
+  list-style: none;
+  user-select: none;
+}
+details summary::-webkit-details-marker { display: none; }
+details summary::before {
+  content: "▸ ";
+  margin-right: 4px;
+  display: inline-block;
+  transition: transform 0.15s;
+}
+details[open] summary::before { transform: rotate(90deg); }
+details[open] summary { border-bottom: 1px solid var(--border-soft); }
+details > :not(summary) { padding: 10px 14px; }
+details p:first-of-type { margin-top: 8px; }
+
+mjx-container[display="true"] { margin: 12px 0 !important; }
+
+footer.aris-footer {
+  margin-top: 60px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+  font-size: 12px;
+  color: var(--ink-muted);
+}
+footer.aris-footer a { color: var(--ink-muted); border-bottom: 1px dotted var(--border); }
+
+@media (max-width: 900px) {
+  .layout { grid-template-columns: 1fr; gap: 20px; padding: 20px 16px; }
+  nav.toc {
+    position: static;
+    max-height: none;
+    border-right: none;
+    border-bottom: 1px solid var(--border-soft);
+    padding-right: 0;
+    padding-bottom: 14px;
+  }
+  header.hero h1 { font-size: 24px; }
+  h2 { font-size: 20px; }
+}
+@media print {
+  nav.toc { display: none; }
+  .layout { grid-template-columns: 1fr; padding: 0; }
+  body { background: white; }
+  header.hero { border-bottom-color: var(--ink); }
+}
+</style>
+</head>
+<body>
+<div class="layout">
+
+<nav class="toc">
+  <h3>Contents</h3>
+  <ol>
+<li><a href="#2026-06-22-td-gcl-incubation-update">2026-06-22 TD-GCL Incubation Update</a>
+</li>
+<li><a href="#2026-06-22-m2-m4-update">2026-06-22 M2-M4 Update</a>
+</li>
+<li><a href="#executive-summary">Executive Summary</a>
+</li>
+<li><a href="#literature-boundary">Literature Boundary</a>
+</li>
+<li><a href="#ranked-current-ideas">Ranked Current Ideas</a>
+</li>
+<li><a href="#key-results">Key Results</a>
+<ul>
+<li><a href="#role-signature-proxy">Role-Signature Proxy</a></li>
+<li><a href="#rsp-gcl-training-prototype">RSP-GCL Training Prototype</a></li>
+</ul>
+</li>
+<li><a href="#next-step">Next Step</a>
+</li>
+</ol>
+</nav>
+
+<main>
+<header class="hero">
+  
+  <h1>Idea Discovery Status: TD-GCL Incubation</h1>
+  
+  
+  <div class="meta">
+    <span><strong>Source:</strong> <code>idea-stage\IDEA_REPORT.md</code></span>
+    <span><strong>SHA256:</strong> <code>0451825e0050</code></span>
+    <span><strong>Rendered:</strong> 2026-06-22 01:13 UTC</span>
+    
+  </div>
+</header>
+
+<h1 id="idea-discovery-report-role-signature-positive-gcl">Idea Discovery Report: Role-Signature Positive GCL</h1>
+<p><strong>Date</strong>: 2026-06-22 <strong>Current status</strong>: <code>NO_READY_METHOD</code>; TD-GCL is <code>SPECULATIVE_INCUBATE</code> <strong>Latest decision</strong>: RSP-GCL has been downgraded after M2-M4; TD-GCL has a homophily split-0 signal but is not ready to refine.</p>
+<h2 id="2026-06-22-td-gcl-incubation-update">2026-06-22 TD-GCL Incubation Update</h2>
+<p>After RSP was downgraded, a new mechanism family was implemented: TD-GCL, Training-Dynamics Graph Contrastive Learning. It uses similar embedding update directions during BGRL training as dynamic positives, avoiding static edges, raw-feature kNN, WL/role signatures, filters, prototypes, and edge masks.</p>
+<p>Split-0 evidence is encouraging but narrow:</p>
+<table><thead><tr><th>Dataset</th><th style="text-align:right">No Dynamics</th><th style="text-align:right">Best TD-GCL</th><th style="text-align:right">Delta</th></tr></thead><tbody><tr><td>Cora</td><td style="text-align:right">0.807107</td><td style="text-align:right">0.842640</td><td style="text-align:right">+0.035533</td></tr><tr><td>CiteSeer</td><td style="text-align:right">0.712622</td><td style="text-align:right">0.729527</td><td style="text-align:right">+0.016905</td></tr><tr><td>Chameleon</td><td style="text-align:right">0.467105</td><td style="text-align:right">0.478070</td><td style="text-align:right">+0.010965</td></tr><tr><td>Texas</td><td style="text-align:right">0.756757</td><td style="text-align:right">0.756757</td><td style="text-align:right">+0.000000</td></tr><tr><td>Wisconsin</td><td style="text-align:right">0.803922</td><td style="text-align:right">0.803922</td><td style="text-align:right">+0.000000</td></tr></tbody></table>
+<p>No NaN/collapse was observed. TD-GCL is kept as <code>SPECULATIVE_INCUBATE</code>, not <code>READY_TO_REFINE</code>, because robustness and novelty are not yet proven and WebKB raw-dominant graphs still show no gain. Full report: <code>refine-logs/TDGCL_M0_M1_RESULTS_20260622.md</code>.</p>
+<p>Quick novelty risk: IFL-GCL and DGCL-PU already cover PU-style semantic positive mining in GCL, and dynamic positive mining exists nearby. TD-GCL's possible delta is specifically using embedding update directions across training, which needs deeper verification.</p>
+<h2 id="2026-06-22-m2-m4-update">2026-06-22 M2-M4 Update</h2>
+<p>RSP-GCL passed a narrow Chameleon gate but failed as a broad paper-level route. Chameleon 10-split RSP training gives <code>role_fused_test@best = 0.573684 +/- 0.026265</code>, and validation selection chooses <code>graph_raw_role</code> in 10/10 splits with <code>0.574781 +/- 0.023321</code>. Texas/Wisconsin remain raw-dominant: raw <code>0.829730</code> / <code>0.839216</code> beats role-fused <code>0.727027</code> / <code>0.774510</code>, and validation-selected fallback reaches only <code>0.827027</code> / <code>0.827451</code>.</p>
+<p>Novelty check also weakens the route: GALE covers node equivalence in graph SSL, WLGCL directly uses WL structural similarity for GCL positives, and SPGCL shows positive-sample GCL is crowded in 2026. RSP should be kept as a diagnostic baseline, not a main method. Full report: <code>refine-logs/RSP_M2_M4_RESULTS_20260622.md</code>.</p>
+<h2 id="executive-summary">Executive Summary</h2>
+<p>重新宽搜索后，当前最强新方向是 <strong>RSP-GCL</strong>（Role-Signature Positive Graph Contrastive Learning）。它用无标签结构角色签名构造非局部正样本：local role statistics、WL-hash neighborhood signature、landmark diffusion signature。这个机制避开了前面失败或低新颖性的谱融合、固定滤波器、语义 kNN、原型、残差预测、local transport 和 counterfactual edge mask 路线。</p>
+<p>最强证据来自 Chameleon：在已有 RFA/BGRL 1000-epoch checkpoints 上做 zero-training proxy，<code>graph_raw_role_wl_landmark</code> 的 10-split mean test 为 <code>0.585965</code>，明显高于 <code>graph_raw=0.496711</code> 和此前 DCA 最好 <code>0.505044</code>。训练版 RSP-GCL split-0 也稳定，Chameleon <code>role_fused_test@best=0.596491</code>，无 NaN/collapse。</p>
+<p>限制也很明确：Texas/Wisconsin 是 raw-feature-dominant，role branch 会负迁移。RSP-GCL 不能直接扩成“所有异配图无条件提升”的主张，必须加入验证集选择或 label-free role gate。</p>
+<h2 id="literature-boundary">Literature Boundary</h2>
+<p>近邻工作已经覆盖常规路线：</p>
+<ul><li>ASPECT: node-wise spectral gating and adaptive spectral contrast.</li><li>PROPGCL: propagation-only GCL and learnable propagation as a strong simple baseline.</li><li>H3GNNs / HarmonyGNNs: joint structural node encoding with SSL.</li><li>Str-GCL: structural commonsense rules in GCL.</li><li>CoRep: coloring learning and multi-hop same-color positives for heterophily.</li><li>HLCL: heterophily graph filters.</li><li>Less is More: graph/feature complementary GCL.</li></ul>
+<p>RSP-GCL 的可辩护差异点不是“结构 GCL 首创”，而是更窄的：基于 role/WL/landmark signature 的非局部 role-equivalent positives，并且对 raw-dominant 图门控关闭。</p>
+<h2 id="ranked-current-ideas">Ranked Current Ideas</h2>
+<table><thead><tr><th style="text-align:right">Rank</th><th>Candidate</th><th>Evidence</th><th>Status</th></tr></thead><tbody><tr><td style="text-align:right">1</td><td>RSP-GCL</td><td>Chameleon 10-split proxy <code>0.585965</code>, training split-0 <code>0.596491</code></td><td>ACTIVE_WITH_SCOPE_LIMIT</td></tr><tr><td style="text-align:right">2</td><td>Validation-gated RSP</td><td>Texas/Wisconsin need role-off protection; val-selected proxy preserves raw roughly</td><td>ACTIVE_NEXT</td></tr><tr><td style="text-align:right">3</td><td>Label-free role reliability gate</td><td>avoids validation-tuned representation choice</td><td>SPECULATIVE</td></tr><tr><td style="text-align:right">4</td><td>WL-only / landmark-only RSP ablations</td><td>WL component is strong on Chameleon</td><td>BACKUP</td></tr><tr><td style="text-align:right">5</td><td>Training-dynamics curriculum GCL</td><td>different mechanism family, not yet tested</td><td>SPECULATIVE</td></tr><tr><td style="text-align:right">6</td><td>Role-conditioned invariance GCL</td><td>may strengthen RSP objective</td><td>BACKUP</td></tr><tr><td style="text-align:right">7</td><td>DCA/AnchorBank</td><td>local positive but novelty score only about 3/10</td><td>DIAGNOSTIC_ONLY</td></tr><tr><td style="text-align:right">8</td><td>VST-GCL / CIG-CLEAR / SBN / SRLP / DCGCL / FTDR / CFR / ORFA / FBA</td><td>implemented or diagnosed and failed as main methods</td><td>STOP</td></tr></tbody></table>
+<h2 id="key-results">Key Results</h2>
+<h3 id="role-signature-proxy">Role-Signature Proxy</h3>
+<table><thead><tr><th>Dataset</th><th style="text-align:right">Best role result</th><th style="text-align:right">Control</th><th>Decision</th></tr></thead><tbody><tr><td>Chameleon 10-split</td><td style="text-align:right"><code>graph_raw_role_wl_landmark</code> 0.585965</td><td style="text-align:right"><code>graph_raw</code> 0.496711, DCA 0.505044</td><td>strong positive</td></tr><tr><td>Texas 10-split</td><td style="text-align:right">full role 0.678378</td><td style="text-align:right">raw 0.829730</td><td>gate required</td></tr><tr><td>Wisconsin 10-split</td><td style="text-align:right">full role 0.719608</td><td style="text-align:right">raw 0.839216</td><td>gate required</td></tr></tbody></table>
+<h3 id="rsp-gcl-training-prototype">RSP-GCL Training Prototype</h3>
+<table><thead><tr><th>Dataset</th><th style="text-align:right">Graph</th><th style="text-align:right">Graph+Raw</th><th style="text-align:right">Graph+Raw+Role</th><th style="text-align:right">Raw</th><th>Verdict</th></tr></thead><tbody><tr><td>Chameleon split 0</td><td style="text-align:right">0.429825</td><td style="text-align:right">0.478070</td><td style="text-align:right">0.596491</td><td style="text-align:right">0.440789</td><td>positive</td></tr><tr><td>Texas split 0</td><td style="text-align:right">0.648649</td><td style="text-align:right">0.783784</td><td style="text-align:right">0.702703</td><td style="text-align:right">0.810811</td><td>gate required</td></tr><tr><td>Wisconsin split 0</td><td style="text-align:right">0.568627</td><td style="text-align:right">0.803922</td><td style="text-align:right">0.725490</td><td style="text-align:right">0.823529</td><td>gate required</td></tr></tbody></table>
+<h2 id="next-step">Next Step</h2>
+<p>Keep TD-GCL as a small incubated route and continue idea discovery in parallel for a broader method. Do not expand TD-GCL to external baselines until novelty, multi-seed/split robustness, and raw-dominant graph gating are verified.</p>
+
+<footer class="aris-footer">
+  Generated by <a href="https://github.com/wanshuiyin/Auto-claude-code-research-in-sleep/blob/main/skills/render-html/SKILL.md">ARIS <code>/render-html</code></a> ·
+  source path <code>idea-stage\IDEA_REPORT.md</code> ·
+  SHA256 <code>0451825e0050</code> ·
+  generated at 2026-06-22 01:13 UTC.
+  This is a generated view — edit the source Markdown, then re-render.
+</footer>
+</main>
+
+</div>
+</body>
+</html>

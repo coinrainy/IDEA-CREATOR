@@ -1,0 +1,70 @@
+# OS/editor noise
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*.tmp
+*.bak
+
+# Python/runtime caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+
+# ARIS/project-local installed skills are managed from the ARIS manifest.
+.agents/skills/
+.aris/meta/
+.aris/tools/
+.aris/traces/
+
+# Nested baseline repos were imported as code snapshots; do not commit their
+# own Git metadata into this repository.
+baselines/**/.git/
+baselines/BGRL/
+baselines/DGI/
+baselines/EDA-GCL/
+baselines/EPAGCL/
+baselines/GCA/
+baselines/GRACE/
+baselines/GRASS/
+baselines/MVGRL/
+baselines/PolyGCL/
+
+# Heavy datasets, processed tensors, caches, model weights, and run artifacts.
+baselines/**/data/
+baselines/**/datasets/
+baselines/**/cache/
+baselines/**/runs/
+baselines/**/weights/
+baselines/**/pkl/
+baselines/run_logs/
+*.pt
+*.pth
+*.pkl
+*.npy
+*.npz
+*.ckpt
+*.bin
+*.onnx
+*.h5
+*.hdf5
+*.log
+events.out.tfevents.*
+
+# Keep the canonical fixed split masks; they are part of the protocol.
+!baselines/dataset_splits/
+!baselines/dataset_splits/**
+!baselines/dataset_splits/**/*.npz
+
+# Large reference/output binaries; keep markdown/csv summaries instead.
+*.pdf
+*.xlsx
+*.zip
+*.tar
+*.tar.gz
+*.7z
+*.rar
