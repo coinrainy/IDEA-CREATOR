@@ -1,8 +1,35 @@
 # Idea Discovery Report: Role-Signature Positive GCL
 
 **Date**: 2026-06-22  
-**Current status**: `DIAGNOSTIC_ONLY_AFTER_GATE`  
-**Latest decision**: RSP-GCL has been downgraded after M2-M4; DCA/VST/CIG/CLEAR remain stopped and no method is currently ready to refine.
+**Current status**: `NO_READY_METHOD`; TD-GCL is `SPECULATIVE_INCUBATE`  
+**Latest decision**: RSP-GCL has been downgraded after M2-M4; TD-GCL has a homophily split-0 signal but is not ready to refine.
+
+## 2026-06-22 TD-GCL Incubation Update
+
+After RSP was downgraded, a new mechanism family was implemented: TD-GCL,
+Training-Dynamics Graph Contrastive Learning. It uses similar embedding update
+directions during BGRL training as dynamic positives, avoiding static edges,
+raw-feature kNN, WL/role signatures, filters, prototypes, and edge masks.
+
+Split-0 evidence is encouraging but narrow:
+
+| Dataset | No Dynamics | Best TD-GCL | Delta |
+|---|---:|---:|---:|
+| Cora | 0.807107 | 0.842640 | +0.035533 |
+| CiteSeer | 0.712622 | 0.729527 | +0.016905 |
+| Chameleon | 0.467105 | 0.478070 | +0.010965 |
+| Texas | 0.756757 | 0.756757 | +0.000000 |
+| Wisconsin | 0.803922 | 0.803922 | +0.000000 |
+
+No NaN/collapse was observed. TD-GCL is kept as `SPECULATIVE_INCUBATE`, not
+`READY_TO_REFINE`, because robustness and novelty are not yet proven and
+WebKB raw-dominant graphs still show no gain. Full report:
+`refine-logs/TDGCL_M0_M1_RESULTS_20260622.md`.
+
+Quick novelty risk: IFL-GCL and DGCL-PU already cover PU-style semantic
+positive mining in GCL, and dynamic positive mining exists nearby. TD-GCL's
+possible delta is specifically using embedding update directions across
+training, which needs deeper verification.
 
 ## 2026-06-22 M2-M4 Update
 
@@ -74,6 +101,6 @@ RSP-GCL 的可辩护差异点不是“结构 GCL 首创”，而是更窄的：�
 
 ## Next Step
 
-Restart idea discovery with a different mechanism family. Keep RSP role
-signatures as a Chameleon diagnostic baseline, but do not expand RSP to
-external baselines or large graphs.
+Keep TD-GCL as a small incubated route and continue idea discovery in parallel
+for a broader method. Do not expand TD-GCL to external baselines until novelty,
+multi-seed/split robustness, and raw-dominant graph gating are verified.

@@ -1,5 +1,32 @@
 # Research Findings
 
+## 2026-06-22: TD-GCL implemented and kept as speculative incubate
+
+**Verdict**: `SPECULATIVE_INCUBATE`, not `READY_TO_REFINE`.
+
+After RSP was downgraded, a new mechanism family was implemented:
+TD-GCL, Training-Dynamics Graph Contrastive Learning. It defines positives
+from similar node embedding update directions during BGRL training, avoiding
+static edges, raw-feature kNN, WL/role signatures, filters, prototypes, and
+edge masks.
+
+The split-0 signal is real but narrow. Against the same trainer with
+`lambda_dynamics=0`, TD-GCL improves Cora from `0.807107` to `0.842640`,
+CiteSeer from `0.712622` to `0.729527`, and Chameleon from `0.467105` to
+`0.478070`. Texas/Wisconsin show no gain and remain below raw-only
+(`0.810811` / `0.823529`). No NaN/collapse occurred.
+
+Quick novelty check found moderate risk: IFL-GCL (SIGIR 2025) and DGCL-PU
+already frame GCL as positive-unlabeled semantic positive mining, and dynamic
+positive mining exists in graph contrastive/clustering literature. TD-GCL's
+possible delta is specifically using embedding update directions across
+training, not static representation similarity.
+
+Recommended next action: keep TD-GCL as an incubated route only. Before any
+paper-level refinement, run a deeper novelty check for training-trajectory
+positives/dynamic positive mining, validate Cora/CiteSeer robustness beyond
+one split, and add a label-free reliability rule for raw-dominant WebKB graphs.
+
 ## 2026-06-22: RSP-GCL downgraded after M2-M4 gate and novelty check
 
 **Verdict**: diagnostic-only, not a final 2026 paper-level method.

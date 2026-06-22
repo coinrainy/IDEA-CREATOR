@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RSP-GCL Gate Report</title>
+<title>Idea Discovery Status: TD-GCL Incubation</title>
 
 <meta name="generator" content="ARIS render-html (academic, v1)">
 <meta name="aris:source-path" content="idea-stage\IDEA_REPORT.md">
-<meta name="aris:source-sha256" content="43c9fa8cd6744d4b2e2fa439aaa2ff1c914d0228b72f2685ac4f096d8b405f22">
-<meta name="aris:generated-at" content="2026-06-22 00:52 UTC">
+<meta name="aris:source-sha256" content="0451825e0050ef8d71f3f8ab44de0238974ef2926162ae84b4f7bf8804541a9e">
+<meta name="aris:generated-at" content="2026-06-22 01:13 UTC">
 
 <!-- MathJax 3 -->
 <script>
@@ -323,6 +323,8 @@ footer.aris-footer a { color: var(--ink-muted); border-bottom: 1px dotted var(--
 <nav class="toc">
   <h3>Contents</h3>
   <ol>
+<li><a href="#2026-06-22-td-gcl-incubation-update">2026-06-22 TD-GCL Incubation Update</a>
+</li>
 <li><a href="#2026-06-22-m2-m4-update">2026-06-22 M2-M4 Update</a>
 </li>
 <li><a href="#executive-summary">Executive Summary</a>
@@ -345,19 +347,25 @@ footer.aris-footer a { color: var(--ink-muted); border-bottom: 1px dotted var(--
 <main>
 <header class="hero">
   
-  <h1>RSP-GCL Gate Report</h1>
+  <h1>Idea Discovery Status: TD-GCL Incubation</h1>
   
   
   <div class="meta">
     <span><strong>Source:</strong> <code>idea-stage\IDEA_REPORT.md</code></span>
-    <span><strong>SHA256:</strong> <code>43c9fa8cd674</code></span>
-    <span><strong>Rendered:</strong> 2026-06-22 00:52 UTC</span>
+    <span><strong>SHA256:</strong> <code>0451825e0050</code></span>
+    <span><strong>Rendered:</strong> 2026-06-22 01:13 UTC</span>
     
   </div>
 </header>
 
 <h1 id="idea-discovery-report-role-signature-positive-gcl">Idea Discovery Report: Role-Signature Positive GCL</h1>
-<p><strong>Date</strong>: 2026-06-22 <strong>Current status</strong>: <code>DIAGNOSTIC_ONLY_AFTER_GATE</code> <strong>Latest decision</strong>: RSP-GCL has been downgraded after M2-M4; DCA/VST/CIG/CLEAR remain stopped and no method is currently ready to refine.</p>
+<p><strong>Date</strong>: 2026-06-22 <strong>Current status</strong>: <code>NO_READY_METHOD</code>; TD-GCL is <code>SPECULATIVE_INCUBATE</code> <strong>Latest decision</strong>: RSP-GCL has been downgraded after M2-M4; TD-GCL has a homophily split-0 signal but is not ready to refine.</p>
+<h2 id="2026-06-22-td-gcl-incubation-update">2026-06-22 TD-GCL Incubation Update</h2>
+<p>After RSP was downgraded, a new mechanism family was implemented: TD-GCL, Training-Dynamics Graph Contrastive Learning. It uses similar embedding update directions during BGRL training as dynamic positives, avoiding static edges, raw-feature kNN, WL/role signatures, filters, prototypes, and edge masks.</p>
+<p>Split-0 evidence is encouraging but narrow:</p>
+<table><thead><tr><th>Dataset</th><th style="text-align:right">No Dynamics</th><th style="text-align:right">Best TD-GCL</th><th style="text-align:right">Delta</th></tr></thead><tbody><tr><td>Cora</td><td style="text-align:right">0.807107</td><td style="text-align:right">0.842640</td><td style="text-align:right">+0.035533</td></tr><tr><td>CiteSeer</td><td style="text-align:right">0.712622</td><td style="text-align:right">0.729527</td><td style="text-align:right">+0.016905</td></tr><tr><td>Chameleon</td><td style="text-align:right">0.467105</td><td style="text-align:right">0.478070</td><td style="text-align:right">+0.010965</td></tr><tr><td>Texas</td><td style="text-align:right">0.756757</td><td style="text-align:right">0.756757</td><td style="text-align:right">+0.000000</td></tr><tr><td>Wisconsin</td><td style="text-align:right">0.803922</td><td style="text-align:right">0.803922</td><td style="text-align:right">+0.000000</td></tr></tbody></table>
+<p>No NaN/collapse was observed. TD-GCL is kept as <code>SPECULATIVE_INCUBATE</code>, not <code>READY_TO_REFINE</code>, because robustness and novelty are not yet proven and WebKB raw-dominant graphs still show no gain. Full report: <code>refine-logs/TDGCL_M0_M1_RESULTS_20260622.md</code>.</p>
+<p>Quick novelty risk: IFL-GCL and DGCL-PU already cover PU-style semantic positive mining in GCL, and dynamic positive mining exists nearby. TD-GCL's possible delta is specifically using embedding update directions across training, which needs deeper verification.</p>
 <h2 id="2026-06-22-m2-m4-update">2026-06-22 M2-M4 Update</h2>
 <p>RSP-GCL passed a narrow Chameleon gate but failed as a broad paper-level route. Chameleon 10-split RSP training gives <code>role_fused_test@best = 0.573684 +/- 0.026265</code>, and validation selection chooses <code>graph_raw_role</code> in 10/10 splits with <code>0.574781 +/- 0.023321</code>. Texas/Wisconsin remain raw-dominant: raw <code>0.829730</code> / <code>0.839216</code> beats role-fused <code>0.727027</code> / <code>0.774510</code>, and validation-selected fallback reaches only <code>0.827027</code> / <code>0.827451</code>.</p>
 <p>Novelty check also weakens the route: GALE covers node equivalence in graph SSL, WLGCL directly uses WL structural similarity for GCL positives, and SPGCL shows positive-sample GCL is crowded in 2026. RSP should be kept as a diagnostic baseline, not a main method. Full report: <code>refine-logs/RSP_M2_M4_RESULTS_20260622.md</code>.</p>
@@ -377,13 +385,13 @@ footer.aris-footer a { color: var(--ink-muted); border-bottom: 1px dotted var(--
 <h3 id="rsp-gcl-training-prototype">RSP-GCL Training Prototype</h3>
 <table><thead><tr><th>Dataset</th><th style="text-align:right">Graph</th><th style="text-align:right">Graph+Raw</th><th style="text-align:right">Graph+Raw+Role</th><th style="text-align:right">Raw</th><th>Verdict</th></tr></thead><tbody><tr><td>Chameleon split 0</td><td style="text-align:right">0.429825</td><td style="text-align:right">0.478070</td><td style="text-align:right">0.596491</td><td style="text-align:right">0.440789</td><td>positive</td></tr><tr><td>Texas split 0</td><td style="text-align:right">0.648649</td><td style="text-align:right">0.783784</td><td style="text-align:right">0.702703</td><td style="text-align:right">0.810811</td><td>gate required</td></tr><tr><td>Wisconsin split 0</td><td style="text-align:right">0.568627</td><td style="text-align:right">0.803922</td><td style="text-align:right">0.725490</td><td style="text-align:right">0.823529</td><td>gate required</td></tr></tbody></table>
 <h2 id="next-step">Next Step</h2>
-<p>Restart idea discovery with a different mechanism family. Keep RSP role signatures as a Chameleon diagnostic baseline, but do not expand RSP to external baselines or large graphs.</p>
+<p>Keep TD-GCL as a small incubated route and continue idea discovery in parallel for a broader method. Do not expand TD-GCL to external baselines until novelty, multi-seed/split robustness, and raw-dominant graph gating are verified.</p>
 
 <footer class="aris-footer">
   Generated by <a href="https://github.com/wanshuiyin/Auto-claude-code-research-in-sleep/blob/main/skills/render-html/SKILL.md">ARIS <code>/render-html</code></a> ·
   source path <code>idea-stage\IDEA_REPORT.md</code> ·
-  SHA256 <code>43c9fa8cd674</code> ·
-  generated at 2026-06-22 00:52 UTC.
+  SHA256 <code>0451825e0050</code> ·
+  generated at 2026-06-22 01:13 UTC.
   This is a generated view — edit the source Markdown, then re-render.
 </footer>
 </main>

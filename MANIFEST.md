@@ -272,3 +272,22 @@
 | 2026-06-22 | /experiment-plan | refine-logs/EXPERIMENT_PLAN.md | implementation | marked RSP R042-R044 completed and downgraded |
 | 2026-06-22 | /result-to-claim | findings.md | review | recorded RSP diagnostic-only decision |
 | 2026-06-22 | /project-handoff | AGENTS.md | handoff | synced handoff with RSP downgrade and next restart action |
+| 2026-06-22 | /experiment-bridge | baselines/BGRL/train_tdgcl_transductive.py | implementation | TD-GCL training-dynamics positive contrastive prototype |
+| 2026-06-22 | /experiment-bridge | baselines/BGRL/reproduce_dcgcl.py | implementation | added tdgcl variant and dynamics arguments to sequential runner |
+| 2026-06-22 | /experiment-bridge | baselines/BGRL/runs/tdgcl_m0_smoke_20260622/results.csv | results | TD-GCL 5-epoch smoke on Cora/Chameleon, no NaN/collapse |
+| 2026-06-22 | /experiment-bridge | baselines/BGRL/runs/tdgcl_m1_split0_20260622/results.csv | results | TD-GCL lambda 0.2 split-0 pilot on Cora/Chameleon/Texas/Wisconsin |
+| 2026-06-22 | /experiment-bridge | baselines/BGRL/runs/tdgcl_ablate_no_dyn_20260622/results.csv | results | TD-GCL no-dynamics direct control |
+| 2026-06-22 | /experiment-bridge | baselines/BGRL/runs/tdgcl_ablate_lambda05_20260622/results.csv | results | TD-GCL lambda 0.5 split-0 ablation |
+| 2026-06-22 | /experiment-bridge | baselines/BGRL/runs/tdgcl_citeseer_ablate_20260622/results.csv | results | CiteSeer TD-GCL no-dynamics control |
+| 2026-06-22 | /experiment-bridge | baselines/BGRL/runs/tdgcl_citeseer_lambda05_20260622/results.csv | results | CiteSeer TD-GCL lambda 0.5 pilot |
+| 2026-06-22 | /experiment-bridge | refine-logs/TDGCL_M0_M1_RESULTS_20260622.md | implementation | TD-GCL implementation, smoke, split-0 pilot, and speculative-incubate decision |
+| 2026-06-22 | /experiment-bridge | refine-logs/EXPERIMENT_RESULTS.md | implementation | updated latest results with TD-GCL evidence |
+| 2026-06-22 | /experiment-bridge | refine-logs/EXPERIMENT_TRACKER.md | implementation | added TD-GCL R045-R048 gates |
+| 2026-06-22 | /idea-discovery | idea-stage/IDEA_REPORT.md | idea-discovery | updated report with TD-GCL incubated candidate |
+| 2026-06-22 | /idea-discovery | idea-stage/IDEA_CANDIDATES.md | idea-discovery | added TD-GCL to candidate pool |
+| 2026-06-22 | /research-pipeline | refine-logs/PIPELINE_SUMMARY.md | implementation | updated pipeline summary with TD-GCL incubate status |
+| 2026-06-22 | /experiment-plan | refine-logs/EXPERIMENT_PLAN.md | implementation | added TD-GCL incubation plan |
+| 2026-06-22 | /result-to-claim | findings.md | review | recorded TD-GCL speculative-incubate finding |
+| 2026-06-22 | /project-handoff | AGENTS.md | handoff | synced handoff with TD-GCL implementation and next novelty/robustness gates |
+| 2026-06-22 | /render-html | idea-stage/IDEA_REPORT.html | idea-discovery | refreshed HTML view after TD-GCL incubation update, source sha256 ebff1b907f21 |
+| 2026-06-22 | /render-html | idea-stage/IDEA_REPORT.html | idea-discovery | refreshed HTML after TD-GCL novelty-risk note, source sha256 0451825e0050 |

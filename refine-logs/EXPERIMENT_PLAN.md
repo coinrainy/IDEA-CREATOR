@@ -27,6 +27,33 @@ graphs, or paper-table expansion for this candidate.
 Next plan: restart idea discovery with a different mechanism family and keep
 RSP role signatures as a diagnostic baseline.
 
+## TD-GCL Incubation Plan
+
+TD-GCL has been implemented as a new speculative route after RSP. It is not
+ready for refinement, but it has enough split-0 signal to keep as an incubated
+candidate.
+
+Completed:
+
+| Run ID | Gate | Result | Decision |
+|---|---|---:|---|
+| R045 | TD-GCL smoke | Cora/Chameleon 5 epoch, no NaN/collapse | pass |
+| R046 | TD-GCL lambda 0.2 split-0 | Cora +0.030918, Chameleon +0.010965, WebKB no gain | partial pass |
+| R047 | TD-GCL lambda 0.5 ablation | Cora +0.035533, Texas regresses | partial pass |
+| R048 | CiteSeer check | +0.016905 over no-dyn | partial pass |
+
+Required before promotion:
+
+1. Direct novelty check for training-trajectory positives and dynamic positive
+   mining in graph SSL.
+2. Cora/CiteSeer robustness check across additional seeds or available fixed
+   splits.
+3. A raw-dominant graph reliability rule that prevents Texas/Wisconsin
+   regression without using test labels.
+
+Stop TD-GCL if novelty collapses or the homophily signal does not survive
+robustness checks.
+
 ## Next Required Runs
 
 No RSP runs are required. The historical plan below is retained for traceability.

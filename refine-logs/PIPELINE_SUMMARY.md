@@ -1,7 +1,7 @@
 # Pipeline Summary: No Ready Candidate After RSP Gate
 
 **Last updated**: 2026-06-22  
-**Current status**: RSP-GCL is diagnostic-only after M2-M4; no final paper method yet.
+**Current status**: RSP-GCL is diagnostic-only after M2-M4; TD-GCL is speculative-incubate; no final paper method yet.
 
 ## Current Candidate
 
@@ -28,12 +28,16 @@ Core mechanism:
 | Wisconsin full role proxy | 0.719608 vs raw 0.839216 | gate required |
 | Texas validation-selected RSP gate | 0.827027 vs raw 0.829730 | protects raw, no gain |
 | Wisconsin validation-selected RSP gate | 0.827451 vs raw 0.839216 | partial protection, no gain |
+| TD-GCL Cora split-0 | 0.842640 vs no-dyn 0.807107 | speculative positive |
+| TD-GCL CiteSeer split-0 | 0.729527 vs no-dyn 0.712622 | speculative positive |
+| TD-GCL WebKB split-0 | no gain and below raw | gating needed |
 
 ## Route Decisions
 
 | Route | Decision |
 |---|---|
 | RSP-GCL | diagnostic-only after M2-M4 and novelty gate |
+| TD-GCL | speculative incubate; homophily signal only |
 | DCA-GCL | diagnostic-only after novelty fail |
 | VST-GCL | stopped after split-0 proxy and low-aux ablation |
 | CIG/CLEAR | stopped after counterfactual edge masks failed Texas/Wisconsin |
@@ -51,6 +55,6 @@ positive-sample GCL is a crowded 2026 topic.
 
 ## Next Step
 
-Restart idea discovery with a different mechanism family. Keep RSP role
-signatures as a diagnostic baseline, but do not expand RSP to external
-baselines, large graphs, or paper-table runs.
+Keep TD-GCL as a small incubated route and continue idea discovery for a
+broader mechanism. Do not expand TD-GCL to external baselines before novelty,
+multi-seed/split robustness, and raw-dominant graph gating pass.

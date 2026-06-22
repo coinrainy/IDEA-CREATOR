@@ -80,3 +80,20 @@ Close works include ASPECT, PROPGCL, H3GNNs/HarmonyGNNs, Str-GCL, CoRep, HLCL, a
 The promotion gate failed. Restart idea discovery with a different mechanism
 family. Future candidates should avoid generic node-equivalence/WL-positive
 claims and avoid relying only on concatenated handcrafted structural signatures.
+
+## TD-GCL Incubation Note
+
+The next implemented mechanism family is TD-GCL, which defines positives from
+similar embedding update trajectories during BGRL training. It has split-0
+homophily signal but is not a final proposal:
+
+| Dataset | No Dynamics | Best TD-GCL | Delta |
+|---|---:|---:|---:|
+| Cora | 0.807107 | 0.842640 | +0.035533 |
+| CiteSeer | 0.712622 | 0.729527 | +0.016905 |
+| Chameleon | 0.467105 | 0.478070 | +0.010965 |
+| Texas | 0.756757 | 0.756757 | +0.000000 |
+| Wisconsin | 0.803922 | 0.803922 | +0.000000 |
+
+Status: `SPECULATIVE_INCUBATE`. Do not run `/research-refine-pipeline` for it
+until novelty and robustness gates pass.

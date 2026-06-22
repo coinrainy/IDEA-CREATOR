@@ -2,6 +2,7 @@
 
 | Rank | Candidate | Mechanism | Current Evidence | Risk | Status |
 |---:|---|---|---|---|---|
+| 0 | TD-GCL | training-dynamics positives from similar embedding update trajectories | Cora +0.035533, CiteSeer +0.016905, Chameleon +0.010965 over no-dyn split-0 | novelty/robustness unverified; WebKB no gain | SPECULATIVE_INCUBATE |
 | 1 | RSP-GCL | Role/WL/landmark signatures define nonlocal structure-equivalent positives for GCL | Chameleon training 10-split `0.573684`; gate `0.574781` | GALE/WLGCL novelty overlap; WebKB raw-dominant | DIAGNOSTIC_ONLY_AFTER_GATE |
 | 2 | Validation-gated RSP | choose role branch only when validation supports it | Chameleon selects role 10/10; Texas/Wisconsin mostly fall back to raw | protects but does not improve raw-dominant graphs | DIAGNOSTIC_ONLY |
 | 3 | Label-free role reliability gate | detect when role signatures are useful without labels | not implemented | difficult but publication-cleaner | SPECULATIVE |
@@ -22,4 +23,6 @@ RSP-GCL completed its immediate gates and did not promote to `READY_TO_REFINE`.
 - Role gate protects Texas/Wisconsin only by falling back to raw, without gains.
 - Direct novelty check found strong overlap with GALE, WLGCL, and SPGCL.
 
-Next action: restart idea discovery with a different mechanism family.
+Next action: keep TD-GCL as a small incubated route, but do not promote it
+until multi-seed/split homophily validation and a direct novelty check pass.
+In parallel, continue idea discovery for a more broadly positive mechanism.

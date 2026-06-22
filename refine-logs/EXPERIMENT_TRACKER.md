@@ -29,7 +29,11 @@
 | R042 | M2 | Chameleon RSP training 10-split | RSP-GCL | Chameleon splits 0-9 | role-fused mean +/- std | MUST | PASS_WITH_LIMIT | role-fused 0.573684 +/- 0.026265; no NaN/collapse; gain mostly from static role signature |
 | R043 | M3 | validation-selected RSP representation gate | RSP-GCL | Chameleon/Texas/Wisconsin splits 0-9 | selected test mean | MUST | PARTIAL_FAIL | Chameleon selects role 10/10 and reaches 0.574781; Texas/Wisconsin mostly fall back to raw with no gain |
 | R044 | M4 | direct novelty gate | RSP-GCL | paper-only check | closest prior overlap | MUST | FAIL | GALE, WLGCL, and SPGCL make generic role/WL positive-sampling claim insufficiently novel |
+| R045 | M0 | TD-GCL smoke | TD-GCL | Cora/Chameleon split 0, 5 epoch | NaN/collapse | SHOULD | PASS | dynamic loss warmup inactive; no runtime or collapse issue |
+| R046 | M1 | TD-GCL split-0 pilot | TD-GCL lambda_dyn=0.2 | Cora/Chameleon/Texas/Wisconsin split 0 | test@best | SHOULD | PARTIAL_PASS | Cora +3.09, Chameleon +1.10 vs no-dyn; Texas/Wisconsin no gain |
+| R047 | M1 ablation | TD-GCL strength check | lambda_dyn=0.0/0.5 | Cora/Chameleon/Texas/Wisconsin split 0 | test@best delta | SHOULD | PARTIAL_PASS | lambda 0.5 improves Cora to 0.842640 but hurts Texas |
+| R048 | M1 ablation | TD-GCL CiteSeer check | lambda_dyn=0.0/0.5 | CiteSeer fixed split | test@best delta | SHOULD | PARTIAL_PASS | CiteSeer improves 0.712622 -> 0.729527 |
 
 ## Active Rule
 
-No candidate is currently `READY_TO_REFINE`. RSP-GCL is downgraded to a diagnostic baseline after R042-R044. Restart idea discovery with a different mechanism family; do not expand RSP, DCA, VST, CIG, or CLEAR to external baselines.
+No candidate is currently `READY_TO_REFINE`. RSP-GCL is downgraded to a diagnostic baseline after R042-R044. TD-GCL is `SPECULATIVE_INCUBATE`: it has homophily split-0 signal but needs novelty and robustness gates. Do not expand RSP, DCA, VST, CIG, CLEAR, or TD-GCL to external baselines yet.

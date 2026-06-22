@@ -19,6 +19,21 @@ For copied Codex installs, use:
 Last reviewed: 2026-06-22.
 
 Latest task sync:
+- 2026-06-22: Implemented TD-GCL (Training-Dynamics Graph Contrastive
+  Learning) after RSP was downgraded. Added
+  `baselines/BGRL/train_tdgcl_transductive.py` and `reproduce_dcgcl.py
+  --variants tdgcl`. TD-GCL uses similar EMA embedding update directions as
+  dynamic positives during BGRL training. M0 smoke passed. Split-0 M1 evidence:
+  Cora improves from no-dynamics `0.807107` to `0.842640`; CiteSeer improves
+  `0.712622` to `0.729527`; Chameleon improves `0.467105` to `0.478070`;
+  Texas/Wisconsin show no gain and remain below raw. No NaN/collapse. Decision:
+  TD-GCL is `SPECULATIVE_INCUBATE`, not `READY_TO_REFINE`. Quick novelty risk:
+  IFL-GCL/DGCL-PU already cover PU-style semantic positive mining, and dynamic
+  positive mining exists in nearby graph contrastive/clustering work; TD-GCL's
+  possible delta is embedding update-direction positives. Next action is deeper
+  novelty check, then Cora/CiteSeer robustness and raw-dominant reliability
+  gating if novelty survives. Report:
+  `refine-logs/TDGCL_M0_M1_RESULTS_20260622.md`.
 - 2026-06-22: Completed RSP-GCL M2-M4 gates after the role-signature idea
   discovery pass. Chameleon 10-split RSP training is positive but conditional:
   role-fused `0.573684 +/- 0.026265`, no NaN/collapse; validation selection

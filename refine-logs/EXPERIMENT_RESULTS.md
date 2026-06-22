@@ -28,6 +28,10 @@ kept as a diagnostic baseline, not an active paper route.
 
 | Candidate | Key setting | Result | Decision |
 |---|---|---:|---|
+| TD-GCL | Cora split-0, lambda_dyn 0.5 vs no-dyn | 0.842640 vs 0.807107 | speculative positive |
+| TD-GCL | CiteSeer split-0, lambda_dyn 0.5 vs no-dyn | 0.729527 vs 0.712622 | speculative positive |
+| TD-GCL | Chameleon split-0, lambda_dyn 0.2/0.5 vs no-dyn | 0.478070 vs 0.467105 | weak positive |
+| TD-GCL | Texas/Wisconsin split-0 | no gain vs no-dyn and below raw | not broad |
 | RSP role signature | Chameleon 10-split zero-training proxy | 0.585965 +/- 0.026073 | diagnostic lead |
 | RSP-GCL train | Chameleon 10-split, 200 epoch, role-fused | 0.573684 +/- 0.026265 | diagnostic-only |
 | RSP validation gate | Texas/Wisconsin selected vs raw | 0.827027 / 0.827451 vs 0.829730 / 0.839216 | no broad gain |
@@ -51,7 +55,26 @@ Detailed reports:
 refine-logs/FBA_M0_M2_RESULTS_20260622_1115.md
 refine-logs/SBN_DCA_RESULTS_20260622_1335.md
 refine-logs/RSP_ROLE_SIGNATURE_RESULTS_20260622.md
+refine-logs/RSP_M2_M4_RESULTS_20260622.md
+refine-logs/TDGCL_M0_M1_RESULTS_20260622.md
 ```
+
+## TD-GCL
+
+TD-GCL uses training-dynamics positives: nodes are positives when their current
+embedding update directions are similar under BGRL training.
+
+| Dataset | No Dynamics | Best Dynamics | Delta | Decision |
+|---|---:|---:|---:|---|
+| Cora | 0.807107 | 0.842640 | +0.035533 | positive split-0 |
+| CiteSeer | 0.712622 | 0.729527 | +0.016905 | positive split-0 |
+| Chameleon | 0.467105 | 0.478070 | +0.010965 | weak positive |
+| Texas | 0.756757 | 0.756757 | +0.000000 | no gain; below raw |
+| Wisconsin | 0.803922 | 0.803922 | +0.000000 | no gain; below raw |
+
+No NaN/collapse was observed. TD-GCL is `SPECULATIVE_INCUBATE`, not
+`READY_TO_REFINE`; it needs multi-seed/split homophily validation, WebKB
+reliability gating, and a direct novelty check before any expansion.
 
 ## RSP-GCL
 
